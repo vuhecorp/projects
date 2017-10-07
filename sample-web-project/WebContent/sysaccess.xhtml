@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+xmlns:ui="http://java.sun.com/jsf/facelets" 
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>Welcome</title>
+	<h:outputStylesheet name="css/styleSheet.css"  />
+</h:head>
+<h:body>
+	<f:view>
+		<h:form id="indexMainForm">
+			<div class="ui-g">
+			    <div id="left" class="ui-g-12 ui-md-2">
+			    </div>
+			    <div class="ui-g-12 ui-md-8 ui-g-nopad">
+			        <div id="bar" class="ui-g-12">
+			        </div>
+			        <p:panel id="indexMainPanel" class="ui-g-12 ui-md-12" style="min-height:500px;"
+						 	header="Sign In">
+						 	<p:messages showDetail="true" autoUpdate="true" closable="true" />
+						 <div class="ui-g-12 ui-md-4">
+		                	
+	                	</div>	
+						 <div class="ui-g-12 ui-md-4">
+						 	<h2>Unauthorized Access</h2>
+						 	<p>You do not have permissions to access this page. Please sign on as a system administrator.</p>
+		                	<p:commandButton value="Log In" action="/signon/signon?faces-redirect=true"/>
+		                 </div>
+	                	 <div class="ui-g-12 ui-md-4">
+		                	
+	                	</div>
+					</p:panel>
+					<div class="ui-g-12">
+			        Hersa 2017
+			    </div>
+			    </div>
+			     <div id="right" class="ui-g-12 ui-md-2">
+			    </div>
+			</div>    
+		</h:form>
+	</f:view>
+</h:body>
+</html>
