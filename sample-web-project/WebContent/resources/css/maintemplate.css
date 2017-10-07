@@ -1,0 +1,90 @@
+@charset "ISO-8859-1";
+
+body{
+	margin:0;
+	padding:0;
+	background-color:silver;
+}
+#logomenu{
+	width:100%;
+}
+#logomenu #logo{
+	min-width:49%;
+	padding-left:5px;
+	font-family: 'Roboto Condensed', sans-serif;
+	float:left;
+	text-align:left;
+	font-size:20px;
+}
+#logomenu #menu{
+	min-width:50%;
+	font-family: 'Roboto Condensed', sans-serif;
+	text-align:right;
+	float:left;
+}
+#logomenu #menu #linkPG{
+	float:right;
+}
+#hid{
+	clear:both;
+}
+#header{
+	width:100%;
+}
+#header #crumns{
+	font-family: 'Roboto Condensed', sans-serif;
+	width:100%;
+	padding:5px;
+	height:auto;
+}
+#mainmenu{
+	width:100%
+}
+#extrainfo{
+	font-family: 'Roboto Condensed', sans-serif;
+	color:white;
+	font-weight:bold;
+	font-size:20px;
+	background-color:red;
+	width:100%;
+	padding:3px;
+	height:auto;
+	min-height:30px;
+	max-height:50px;
+}
+#topcontent{
+	background-color:blue;
+	width:100%;
+	height:auto;
+	min-height:250px;
+	max-height:500px;
+	
+}
+@media screen and (max-width: 480px) {
+    body {
+        margin:0;
+		padding:0;
+    }
+    #logomenu{
+		width:100%;
+	}
+	#logomenu #logo{
+		min-width:100%;
+		height:auto;
+		font-family: 'Roboto Condensed', sans-serif;
+		text-align:center;
+		margin: 0 auto;
+	}
+	#logomenu #menu{
+		min-width:100%;
+		height:auto;
+		font-family: 'Roboto Condensed', sans-serif;
+		text-align:center;
+		margin: 0 auto;
+		display:none;
+	}
+	#logomenu #menu #linkPG{
+		width: 100%;
+  		margin: 0 auto;
+	}
+}

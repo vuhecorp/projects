@@ -6,11 +6,13 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui">
 <h:head>
-
+	<h:outputStylesheet library="css" name="maintemplate.css"/>
 </h:head>
 <h:body>
 	<ui:composition>
-		<p:megaMenu orientation="horizontal" style="margin-top:20px">
+		<ui:insert name="menu">
+		<h:form>
+		<p:megaMenu id="mainmenu" orientation="horizontal">
 			<p:submenu label="User Management" icon="ui-icon-check" rendered="#{signOnBean.user.role.equalsIgnoreCase('sysadmin') or 
 			signOnBean.user.role.equalsIgnoreCase('admin')}">
 				<p:column>
@@ -19,8 +21,11 @@
 					</p:submenu>
 				</p:column>
 			</p:submenu>
+			<p:menuitem value="Content" url="${pageContext.request.contextPath}/private/admin/content.xhtml" icon="ui-icon-close" />
 			<p:menuitem value="Sign Out" action="#{signOnBean.doSignOff}" icon="ui-icon-close" />
 		</p:megaMenu>
+		</h:form>
+		</ui:insert>
 	</ui:composition>
 </h:body>
 </html>
