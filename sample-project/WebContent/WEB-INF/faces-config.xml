@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config
+    xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
+    version="2.2">
+ <managed-bean>
+	  <managed-bean-name>signOnBean</managed-bean-name>
+	  <managed-bean-class>com.hersa.sample.project.web.faces.UserSignOnPage</managed-bean-class>
+	  <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+     <managed-bean>
+	  <managed-bean-name>bean</managed-bean-name>
+	  <managed-bean-class>com.hersa.sample.project.web.faces.Bean</managed-bean-class>
+	  <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+     <managed-bean>
+	  <managed-bean-name>AuthenticationManager</managed-bean-name>
+	  <managed-bean-class>com.hersa.sample.project.bom.AuthenticationManager</managed-bean-class>
+	  <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+  
+   
+</faces-config>
