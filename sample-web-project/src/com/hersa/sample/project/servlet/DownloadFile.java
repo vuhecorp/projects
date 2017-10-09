@@ -30,7 +30,7 @@ public class DownloadFile extends HttpServlet {
 		// TODO Auto-generated method stub
 	
 		//read input file from absolute path
-		String filePath = "C:\\Users\\*****\\Documents\\Files\\fileServlet.txt";
+		String filePath = "C:\\Users\\Victor\\Documents\\Files\\fileServlet.txt";
 		File downloadFile = new File(filePath);
 		FileInputStream inStream = new FileInputStream(downloadFile);
 		

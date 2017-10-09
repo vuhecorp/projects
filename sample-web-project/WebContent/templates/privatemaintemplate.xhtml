@@ -6,11 +6,13 @@ xmlns:f="http://java.sun.com/jsf/core"
 xmlns:h="http://java.sun.com/jsf/html"
 xmlns:p="http://primefaces.org/ui">
 <h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 	<h:outputStylesheet library="css" 
 				        name="maintemplate.css"/>
 	<link href="https://fonts.googleapis.com/css?family=Pangolin|Roboto+Condensed" 
 		  rel="stylesheet"/> 
-	<title><ui:insert>this is the title</ui:insert></title>
+	<title><ui:insert name="title">this is the title</ui:insert></title>
+	<ui:insert name="scripts"></ui:insert>
 </h:head>
 <h:body>
 	<div id="logomenu" class="logomenu">
@@ -28,7 +30,9 @@ xmlns:p="http://primefaces.org/ui">
 					<p:commandLink value="Link 1"/>
 					<p:commandLink value="Link 2"/>
 					<p:commandLink value="Link 3"/>
-					<p:commandLink value="Link 5"/>
+					<p:column>
+						<a href="#{request.contextPath}/DownloadFile">Download</a>
+					</p:column>
 				</p:panelGrid>
 			</ui:insert>
 		</div>
@@ -38,7 +42,7 @@ xmlns:p="http://primefaces.org/ui">
 	</div>
 	<div id="header" class="header">
 		<ui:insert name="header">
-			<ui:include src="/WEB-INF/templates/menu.xhtml" />
+			<ui:include src="menus/privateMenu.xhtml" />
 			<div id="crumns">
 				<ui:insert name="crums">
 					Home >
@@ -46,23 +50,32 @@ xmlns:p="http://primefaces.org/ui">
 			</div>
 		</ui:insert>
 	</div>
-	<div id="extrainfo" name="extrainfo" align="center">
-		<ui:insert name="extrainfo">THIS IS COMING FROM MY TEMPLATE</ui:insert>
-	</div>
-	<div id="topcontent" class="topcontent">
-		<ui:insert name="topcontent">
-			contentboxes
-		</ui:insert>
-	</div>
-	<div id="middlecontent" class="middlecontent">
-		<ui:insert name="middlecontent">
-			middle content
-		</ui:insert>
-	</div>
-	<div id="footer" class="footer">
-		<ui:insert name="footer">
-			Copyright Hersa 2017
-		</ui:insert>
+	<!-- * renders 'extra info' this div can be used for *
+		 * 'alert', 'info' or 'warning' type messages.   *-->
+	<p:outputPanel rendered="true">
+		<div id="extrainfo" name="extrainfo" align="center">
+			<ui:insert name="extrainfo">THIS IS PRIVATE CONTENT</ui:insert>
+		</div>
+	</p:outputPanel>
+	<div id="wrapper">
+		<div id="pageheader">
+			<h2><ui:insert name="pageheader"></ui:insert></h2>
+		</div>
+		<div id="topcontent" class="topcontent">
+			<ui:insert name="topcontent">
+				
+			</ui:insert>
+		</div>
+		<div id="middlecontent" class="middlecontent">
+			<ui:insert name="middlecontent">
+				middle content
+			</ui:insert>
+		</div>
+		<div id="footer" class="footer">
+			<ui:insert name="footer">
+				Copyright Hersa 2017
+			</ui:insert>
+		</div>
 	</div>
 </h:body>
 </html>

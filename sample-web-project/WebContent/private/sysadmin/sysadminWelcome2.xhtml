@@ -8,11 +8,14 @@ xmlns:p="http://primefaces.org/ui">
 
 <h:body>
 	<ui:composition template="${pageContext.request.contextPath}/templates/privatemaintemplate.xhtml">
-		
+		<ui:define name="title">Welcome</ui:define>
+		<ui:define name="crums">Welcome > </ui:define>	
 		<ui:define name="topcontent">
-			<div>
-				contentbox bleu
-			</div>
+			<h2>Welcome Admin: #{signOnBean.user.firstName} #{signOnBean.user.lastName}!</h2>
+           	<p:outputLabel value="#{SignOn.user.firstName}"/>
+           	<p>Welcome to this private page.</p>
+           	<p:commandButton value="Sign Out" action="#{signOnBean.doSignOff}"/>
+           	<p:commandButton value="Other Page" action="/private/otherPage?faces-redirect=true"/>
 		</ui:define>
 	</ui:composition>
 </h:body>

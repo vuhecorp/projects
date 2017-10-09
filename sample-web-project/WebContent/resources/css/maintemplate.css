@@ -4,12 +4,14 @@ body{
 	margin:0;
 	padding:0;
 	background-color:silver;
+	font-family: 'Roboto Condensed', sans-serif;
 }
+
 #logomenu{
 	width:100%;
 }
 #logomenu #logo{
-	min-width:49%;
+	width:49%;
 	padding-left:5px;
 	font-family: 'Roboto Condensed', sans-serif;
 	float:left;
@@ -17,7 +19,7 @@ body{
 	font-size:20px;
 }
 #logomenu #menu{
-	min-width:50%;
+	width:50%;
 	font-family: 'Roboto Condensed', sans-serif;
 	text-align:right;
 	float:left;
@@ -28,6 +30,7 @@ body{
 #hid{
 	clear:both;
 }
+
 #header{
 	width:100%;
 }
@@ -47,17 +50,26 @@ body{
 	font-size:20px;
 	background-color:red;
 	width:100%;
-	padding:3px;
 	height:auto;
 	min-height:30px;
 	max-height:50px;
 }
-#topcontent{
-	background-color:blue;
+#wrapper{
+	margin:0;
+	padding:0;
+	height:100%;
+}
+#wrapper #pageheader{
+	background-color:white;
 	width:100%;
-	height:auto;
-	min-height:250px;
-	max-height:500px;
+	
+	padding-left:2%;
+	
+}
+#wrapper #topcontent{
+	width:100%;
+	min-height:80%;
+	
 	
 }
 @media screen and (max-width: 480px) {
@@ -86,5 +98,25 @@ body{
 	#logomenu #menu #linkPG{
 		width: 100%;
   		margin: 0 auto;
+	}
+	#extrainfo{
+		font-family: 'Roboto Condensed', sans-serif;
+		color:white;
+		font-weight:bold;
+		font-size:40px;
+		background-color:red;
+		width:100%;
+		padding:3px;
+		height:auto;
+		min-height:30px;
+		max-height:100px;
+	}
+	#topcontent{
+		background-color:blue;
+		width:100%;
+		height:auto;
+		min-height:500px;
+		max-height:700px;
+	
 	}
 }

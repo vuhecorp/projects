@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+xmlns:ui="http://java.sun.com/jsf/facelets" 
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<h:outputStylesheet library="css" 
+				        name="maintemplate.css"/>
+	<link href="https://fonts.googleapis.com/css?family=Pangolin|Roboto+Condensed" 
+		  rel="stylesheet"/> 
+	<title><ui:insert name="title">this is the title</ui:insert></title>
+</h:head>
+<h:body>
+	<div id="logomenu" class="logomenu">
+		<div id="logo">
+			<ui:insert name="logo">
+				logo
+			</ui:insert>
+		</div>
+		<div id="menu">
+			<ui:insert name="topmenu">
+				<p:panelGrid id="linkPG" 
+							 columns="4" 
+							 styleClass="ui-panelgrid-blank"
+							 layout="grid">
+					<p:commandLink value="Link 1"/>
+					<p:commandLink value="Link 2"/>
+					<p:commandLink value="Link 3"/>
+					<p:commandLink value="Link 5"/>
+				</p:panelGrid>
+			</ui:insert>
+		</div>
+		<div id="hid">
+			<input type="hidden"/>
+		</div>
+	</div>
+	<div id="header" class="header">
+		<ui:insert name="header">
+			<ui:include src="menus/publicMenu.xhtml" />
+			<div id="crumns">
+				<ui:insert name="crums">
+					Home >
+				</ui:insert>
+			</div>
+		</ui:insert>
+	</div>
+	<!-- * renders 'extra info' this div can be used for *
+		 * 'alert', 'info' or 'warning' type messages.   *-->
+	<p:outputPanel rendered="true">
+		<div id="extrainfo" name="extrainfo" align="center">
+			<ui:insert name="extrainfo">THIS IS PUBLIC CONTENT</ui:insert>
+		</div>
+	</p:outputPanel>
+	<div id="topcontent" class="topcontent">
+		<ui:insert name="topcontent">
+			contentboxes
+		</ui:insert>
+	</div>
+	<div id="middlecontent" class="middlecontent">
+		<ui:insert name="middlecontent">
+			middle content
+		</ui:insert>
+	</div>
+	<div id="footer" class="footer">
+		<ui:insert name="footer">
+			Copyright Hersa 2017
+		</ui:insert>
+	</div>
+</h:body>
+</html>
