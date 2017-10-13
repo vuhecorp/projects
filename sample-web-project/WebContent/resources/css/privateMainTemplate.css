@@ -12,17 +12,19 @@ body{
 }
 #logomenu #logo{
 	width:49%;
-	padding-left:5px;
+	padding-left:10px;
 	font-family: 'Roboto Condensed', sans-serif;
 	float:left;
 	text-align:left;
 	font-size:20px;
 }
 #logomenu #menu{
-	width:50%;
+	width:49%;
 	font-family: 'Roboto Condensed', sans-serif;
 	text-align:right;
 	float:left;
+	padding-right:10px;
+	
 }
 #logomenu #menu #linkPG{
 	float:right;
@@ -37,7 +39,7 @@ body{
 #header #crumns{
 	font-family: 'Roboto Condensed', sans-serif;
 	width:100%;
-	padding:5px;
+	padding:10px;
 	height:auto;
 }
 #mainmenu{
@@ -56,7 +58,7 @@ body{
 }
 #wrapper{
 	margin:0;
-	padding:0;
+	padding:10px;
 	height:100%;
 }
 #wrapper #pageheader{
@@ -72,7 +74,7 @@ body{
 	
 	
 }
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 600px) {
     body {
         margin:0;
 		padding:0;

@@ -4,7 +4,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import org.apache.log4j.Logger;
+
 public class DefaultConnectionProvider {
+	final static Logger logger = Logger.getLogger(DefaultConnectionProvider.class);
 
 	private static Connection connection;
 	
@@ -34,8 +37,5 @@ public class DefaultConnectionProvider {
 	public static Connection getConnection() {
 		return connection;
 	}
-
-	
-
 	
 }

@@ -1,10 +1,13 @@
 package com.hersa.sample.project.bom;
 
+import org.apache.log4j.Logger;
+
 import com.hersa.sample.project.dao.user.UserDAO;
 import com.hersa.sample.project.dao.user.UserDAOImpl;
 import com.hersa.sample.project.utils.Constants;
 
 public class AbstractBaseManager {
+	final static Logger logger = Logger.getLogger(AbstractBaseManager.class);
 
 	public AbstractBaseManager() {
 		// TODO Auto-generated constructor stub

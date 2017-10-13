@@ -3,11 +3,14 @@ package com.hersa.sample.project.bom;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.hersa.sample.project.dao.user.User;
 import com.hersa.sample.project.utils.Constants;
 
 public class UserManager extends AbstractBaseManager{
-	
+	final static Logger logger = Logger.getLogger(UserManager.class);
+
 	public UserManager(){
 		 DefaultConnectionProvider.
 			setConnectionProvider(Constants.USER_PROVIDER);

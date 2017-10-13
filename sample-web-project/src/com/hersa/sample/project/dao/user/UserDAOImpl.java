@@ -7,12 +7,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.hersa.sample.project.bom.DefaultConnectionProvider;
 import com.hersa.sample.project.utils.Constants;
 
 
 public class UserDAOImpl implements UserDAO {
-	
+	final static Logger logger = Logger.getLogger(UserDAOImpl.class);
+
 	private String tableName = "users";
 	private Connection connection;
 	private String prefix = Constants.USER_PROVIDER;

@@ -8,7 +8,7 @@ xmlns:p="http://primefaces.org/ui">
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 	<h:outputStylesheet library="css" 
-				        name="maintemplate.css"/>
+				        name="privateMainTemplate.css"/>
 	<link href="https://fonts.googleapis.com/css?family=Pangolin|Roboto+Condensed" 
 		  rel="stylesheet"/> 
 	<title><ui:insert name="title">this is the title</ui:insert></title>
@@ -58,9 +58,6 @@ xmlns:p="http://primefaces.org/ui">
 		</div>
 	</p:outputPanel>
 	<div id="wrapper">
-		<div id="pageheader">
-			<h2><ui:insert name="pageheader"></ui:insert></h2>
-		</div>
 		<div id="topcontent" class="topcontent">
 			<ui:insert name="topcontent">
 				
@@ -68,7 +65,7 @@ xmlns:p="http://primefaces.org/ui">
 		</div>
 		<div id="middlecontent" class="middlecontent">
 			<ui:insert name="middlecontent">
-				middle content
+				
 			</ui:insert>
 		</div>
 		<div id="footer" class="footer">
