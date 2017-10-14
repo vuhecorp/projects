@@ -33,7 +33,13 @@ public class UserSignOnPage implements Serializable{
 	public String doSignOn(){
 		boolean authenticated = false;
 		if (!StringUtils.isEmptyOrWhitespaceOnly(email) && !StringUtils.isEmptyOrWhitespaceOnly(password)) {
-			user = am.authenticateUser(email, password);
+			try {
+				user = am.authenticateUser(email, password);
+			} catch (Exception e) {
+				 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Info", e.getMessage()));
+				 e.printStackTrace();
+				 return "";
+			}
 			if (user != null) {
 				authenticated = true;
 				email = new String();
@@ -44,6 +50,10 @@ public class UserSignOnPage implements Serializable{
 			 		+ "and password must be specified."));
 		}
 		if (authenticated) {
+			HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+			session.setAttribute("User", user);
+			FacesContext.getCurrentInstance()
+			.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Success!"));
 			if (user.getRole().equalsIgnoreCase("admin")) {
 				return "/private/admin/adminWelcome?faces-redirect=true";
 			}else if(user.getRole().equalsIgnoreCase("sysadmin")){
@@ -52,6 +62,7 @@ public class UserSignOnPage implements Serializable{
 				return "/private/user/userWelcome?faces-redirect=true";
 			}
 		}else{
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Info", "Invalid Credentials."));
 			return "";
 		}
 	}

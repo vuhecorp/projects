@@ -1,5 +1,6 @@
 package com.hersa.sample.project.bom;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,6 @@ public class UserManager extends AbstractBaseManager{
 				user = user1;
 				return user;
 			}
-			
 		}
 		 return null;
 	}
@@ -40,11 +40,27 @@ public class UserManager extends AbstractBaseManager{
 		}
 		return userList;
 	}
+	public void createUser(User user) throws SQLException{
+		this.getUserDAO().createUser(user);
+	}
+	public void deleteUser(User user) throws SQLException{
+		this.getUserDAO().deleteUser(user);
+	}
 	public void resetUser(User user) throws Exception{
 		user.setLocked(0);
 		user.setRecentUnlock(1);
 		user.setFailedAttempts(0);
 		this.updateUser(user);
+	}
+	public List<User> retrieveByLocked(int locked){
+		List<User> list = null;
+		try {
+			list = this.getUserDAO().listByLocked(locked);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
 	}
 
 }

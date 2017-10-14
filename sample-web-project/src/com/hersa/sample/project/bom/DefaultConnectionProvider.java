@@ -12,7 +12,7 @@ public class DefaultConnectionProvider {
 	private static Connection connection;
 	
 	public static Connection setConnectionProvider(String schema){
-		String connectionUrl = "jdbc:mysql://localhost:3306/" + schema;
+		String connectionUrl = "jdbc:mysql://localhost:3306/" + schema + "?autoReconnect=true&useSSL=false";
 		connection = null;
 		
 		try {

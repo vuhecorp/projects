@@ -28,7 +28,7 @@ public class AuthenticationManager {
 	public AuthenticationManager(){
 		totalTries = 0;
 	}
-	public User authenticateUser(String email, String Password){
+	public User authenticateUser(String email, String Password) throws Exception{
 		User user = null;
 		Calendar calendar = Calendar.getInstance();
 		Date now = calendar.getTime();
@@ -94,17 +94,13 @@ public class AuthenticationManager {
 						}
 						if (user.getPassword().equals(Password)) {
 							//user authenticated
-							FacesContext.getCurrentInstance()
-							.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Info", "Success!"));
-							HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-							session.setAttribute("User", user);
+
 							totalTries = 0;
 							user.setFailedAttempts(0);
 							um.updateUser(user);
 							return user;
 						}else{
 							//authentication failed.
-							FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Info", "Invalid Credentials."));
 							totalTries++;
 							if (totalTries == 1) {
 								user.setFirstFailed(currentTimeStamp);
@@ -118,18 +114,21 @@ public class AuthenticationManager {
 						user.setLocked(1);
 						user.setLockedOn(currentTimeStamp);
 						um.updateUser(user);
-						FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Info", "You have "
-								+ "reached the max number of attempts. Your account has been locked out."));
-						return null;
+						throw new Exception("You have reached the max number of attempts. Your account has been locked out.");
+//						FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Info", "You have "
+//								+ "reached the max number of attempts. Your account has been locked out."));
+						
 					}
 				}else{
-					FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Info", "Your account "
-							+ "is locked. Please contact an administrator."));
-					return null;
+					throw new Exception("Your account has been locked out.");
+//					FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Info", "Your account "
+//							+ "is locked. Please contact an administrator."));
+//					return null;
 				}
 			}else{
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Info", "This email does not exist."));
-				return null;
+				throw new Exception("This email does not exist.");
+//				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Info", "This email does not exist."));
+//				return null;
 			}
 		return null;
 	}

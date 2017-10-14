@@ -1,6 +1,7 @@
 package com.hersa.sample.project.dao.user;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -11,6 +12,8 @@ public interface UserDAO {
 	public void setConnection(Connection connection);
 	public List<User> retrieveUserByEmail(String Username);
 	public void updateUser(User user);
-	public void deleteUser(User user);
+	public void deleteUser(User user) throws SQLException;
+	public void createUser(User user) throws SQLException;
+	public List<User> listByLocked(int active) throws SQLException;
 	public User[] listAllUsers();
 }

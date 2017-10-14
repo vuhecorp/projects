@@ -21,8 +21,12 @@ public class UserDAOImpl implements UserDAO {
 	private String prefix = Constants.USER_PROVIDER;
 	private String sqlSelect = "SELECT * FROM " + prefix + "." + tableName + " WHERE email = ?;";
 	private String sqlUpdate = "UPDATE " + prefix + "." + tableName + " SET fname = ?, lname = ?, password = ?, email = ?, isActive = ?, "
-			+ "profileImage = ?, role = ?, recentunlock = ?, failedattempts = ?, lastfailed = ?, locked = ?, lockedon = ?, firstfailed = ? ";
+								+ "profileImage = ?, role = ?, recentunlock = ?, failedattempts = ?, lastfailed = ?, locked = ?, lockedon = ?, firstfailed = ? ";
 	private String sqlSelectAll = "SELECT * FROM " + prefix + "." + tableName + ";";
+	private String sqlDelete = "DELETE FROM " + prefix + "." + tableName + " WHERE id = ?;";
+	private String sqlCreate = "INSERT INTO " + prefix + "." + tableName + " (fname, lname, password, email, role)"
+								+ " VALUES (?,?,?,?,?);";
+	private String sqlSelectLocked = "SELECT * FROM " + prefix + "." + tableName + " WHERE locked = ?;";
 	public UserDAOImpl() {
 		// TODO Auto-generated constructor stub
 		
@@ -153,9 +157,73 @@ public class UserDAOImpl implements UserDAO {
 		this.tableName = tableName;
 	}
 	@Override
-	public void deleteUser(User user) {
-		// TODO Auto-generated method stub
+	public void deleteUser(User user) throws SQLException {
+		PreparedStatement statement;
+		try {
+			statement = connection.prepareStatement(sqlDelete);
+			statement.setLong(1, user.getId());
+			statement.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SQLException("Error with data base connectivity.");
+		}
+	}
+	@Override
+	public void createUser(User user) throws SQLException {
+		try {
+			PreparedStatement statement = connection.prepareStatement(sqlCreate);
+			statement.setString(1, user.getFirstName());
+			statement.setString(2, user.getLastName());
+			statement.setString(3, user.getPassword());
+			statement.setString(4, user.getEmail());
+			statement.setString(5, user.getRole());
+			
+			statement.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new SQLException("Error in database connectivity.");
+		}finally{
+			DefaultConnectionProvider.closeConnection(connection);
+		}
 		
+	}
+	@Override
+	public List<User> listByLocked(int locked) throws SQLException {
+	List<User> userList = new ArrayList<User>();
+		
+		try {
+			PreparedStatement statement = connection.prepareStatement(sqlSelectLocked);
+			
+			statement.setInt(1, locked);
+			ResultSet results = statement.executeQuery();
+			
+			while(results.next()){
+
+				User user = new User();
+				user.setId(results.getInt("id"));
+				user.setFirstName(results.getString("fname"));
+				user.setLastName(results.getString("lname"));
+				user.setPassword(results.getString("password"));
+				user.setEmail(results.getString("email"));
+				user.setActive(results.getInt("isActive"));
+				user.setImagePath(results.getString("profileImage"));
+				user.setRole(results.getString("role"));
+				user.setRecentUnlock(results.getInt("recentunlock"));
+				user.setFailedAttempts(results.getInt("failedattempts"));
+				user.setLastFailed(results.getTimestamp("lastFailed"));
+				user.setLocked(results.getInt("locked"));
+				user.setLockedOn(results.getTimestamp("lockedon"));
+				user.setFirstFailed(results.getTimestamp("firstfailed"));
+				userList.add(user);
+			}
+			
+   		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			 DefaultConnectionProvider.closeConnection(connection);
+		}
+		return userList;
 	}
 
 	
