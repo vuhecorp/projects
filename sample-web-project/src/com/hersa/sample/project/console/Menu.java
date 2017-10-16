@@ -56,15 +56,7 @@ public class Menu {
 		printMenu(options);
 		return options.size();
 	}
-	public static void printReview(User newUser) {
-		Utils.printHeader("Review");
-		String format = "%-15s %-10s\n";
-		System.out.printf(format, "First Name: ", newUser.getFirstName());
-		System.out.printf(format, "Last Name: ", newUser.getLastName());
-		System.out.printf(format, "Email: ", newUser.getEmail());
-		System.out.printf(format, "Role: ", newUser.getRole());
-		Utils.printClose();
-	}
+	
 	public static Map<String, Object> printRoleMenu() {
 		Utils.printValue("Select Role: ");
 		Map<String, Object> opMap = new HashMap<String, Object>();

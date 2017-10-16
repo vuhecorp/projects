@@ -2,6 +2,7 @@ package com.hersa.sample.project.console.bom;
 
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -64,32 +65,129 @@ public class UserManagement {
 		int choice = Utils.chooseInt();
 		choice = Utils.validateIntChoice(choice, numOptions);
 		User editUser =  userList.get(choice - 1);
+		
+		Utils.printClose();
 		Utils.printValue("Editing User: " + editUser.getLastName() + ", " + editUser.getFirstName());
 		
 		//build a property string map to present user with properties to edit.
 		Map<String, String> userValsMap = buildUserMap(editUser);
 		editUser = editUserProperties(editUser, userValsMap);
 		
+		//print review an allow user to decide to save or cancel.
+		printReview(editUser);
+		
+		Utils.printValue("Would you like to keep these changes? Y/N");
+		String keep = Utils.chooseString();
+		boolean boolKeep = Utils.validateBoolean(keep);
+		if (boolKeep) {
+			um.updateUser(editUser);
+			System.err.println("User information has been update.");
+		}else {
+			System.err.println("Update canceled.");
+		}
 	}
 	private static User editUserProperties(User editUser, Map<String, String> userValsMap) {
 		//iterate over property list and allow user to select an action.
 		Utils.printHeader("Edit User Properties");
 		
+		int editCount = 0; //keep count of number of propertied edited.
 		for (Entry<String, String> user : userValsMap.entrySet()) {
+			//inform user of current property to edit.
 			Utils.printValue("Property Name: " + user.getKey());
 			Utils.printValue("Current Value: " + user.getValue());
+			
+			//allow user to choose desired action.
 			Utils.printValue("What would you like to do?");
 			Map<String, Object> map1 = Menu.printEditUserPropertyMenu();
 			int choice1 = Utils.chooseInt();
 			choice1 = Utils.validateIntChoice(choice1, (Integer) map1.get("numOptions"));
+			
+			//if user chose to edit: execute this code.
+			if (choice1 != 1) {
+				String newValue = null;
+				editCount++;
+				if (user.getKey().equals("Role")) {
+					// if user property is role, present user with role option menu.
+					newValue = selectNewRole();
+						
+					// display new value and allow user to re-edit.
+					Utils.printValue("New Value for " + user.getKey() + ": '" + newValue + "'");
+					Utils.printValue("Keep?: Y/N");
+					String keep = Utils.chooseString();
+					boolean boolKeep = Utils.validateBoolean(keep);
+
+					// while user is not happy with new value, allow edit.
+					while (!boolKeep) {
+						newValue = selectNewRole();
+						Utils.printValue("New Value for " + user.getKey() + ": '" + newValue + "'");
+						Utils.printValue("Keep?: Y/N");
+						keep = Utils.chooseString();
+						boolKeep = Utils.validateBoolean(keep);
+					}
+				}else {
+					//collect new property value from console.
+					Utils.printValue("Enter a new value for: " + user.getKey());
+					newValue = Utils.chooseString();
+					
+					//display new value and allow user to re-edit.
+					Utils.printValue("New Value for "+ user.getKey() + ": '" + newValue + "'");
+					Utils.printValue("Keep?: Y/N");
+					String keep = Utils.chooseString();
+					boolean boolKeep = Utils.validateBoolean(keep);
+					
+					//while user is not happy with new value, allow edit.
+					while(!boolKeep) {
+						Utils.printValue("Re-enter value for " + user.getKey() + ": ");
+						newValue = Utils.chooseString();
+						Utils.printValue("New Value for "+ user.getKey() + ": '" + newValue + "'");
+						Utils.printValue("Keep?: Y/N");
+						keep = Utils.chooseString();
+						boolKeep = Utils.validateBoolean(keep);
+					}
+				}
+				user.setValue(newValue);
+				System.err.println("New value set for: " + user.getKey() + ": '" + user.getValue() + "'");
+			}
 			Utils.printClose();
 		}
-		
+		if (editCount > 0) {
+			//set new user properties.
+			setNewUserProperties(editUser, userValsMap);
+		}
 		return editUser;
 	}
 	
+	private static String selectNewRole() {
+		Utils.printValue("Select a new value for User Role:");
+		Map<String, Object> map = Menu.printRoleMenu();
+		int numOptions = (int) map.get("numOptions");
+		@SuppressWarnings("unchecked")
+		List<String> opList = (List<String>) map.get("optionsList");
+		int choice = Utils.chooseInt();
+		choice = Utils.validateIntChoice(choice, numOptions);
+		String newValue = opList.get(choice - 1);
+		return newValue;
+	}
+	private static void setNewUserProperties(User editUser, Map<String, String> userValsMap) {
+		//sets new properties to user object.
+		for (Entry<String, String> entry : userValsMap.entrySet()) {
+			if (entry.getKey().equalsIgnoreCase("First Name")) {
+				editUser.setFirstName(entry.getValue());
+			}
+			if (entry.getKey().equalsIgnoreCase("Last Name")) {
+				editUser.setLastName(entry.getValue());
+			}
+			if (entry.getKey().equalsIgnoreCase("Email")) {
+				editUser.setEmail(entry.getValue());
+			}
+			if (entry.getKey().equalsIgnoreCase("Role")) {
+				editUser.setRole(entry.getValue());
+			}
+		}
+	}
+	
 	private static Map<String, String> buildUserMap(User user) {
-		Map<String, String> map = new HashMap<String, String>();
+		Map<String, String> map = new LinkedHashMap<String, String>();
 		map.put("First Name", user.getFirstName());
 		map.put("Last Name", user.getLastName());
 		map.put("Email", user.getEmail());
@@ -147,7 +245,7 @@ public class UserManagement {
 		int choice = Utils.chooseInt();
 		choice = Utils.validateIntChoice(choice, numOptions);
 		newUser.setRole(opList.get(choice - 1));
-		Menu.printReview(newUser);
+		printReview(newUser);
 		
 		Utils.printValue("Save?: Y/N");
 		String choice1 = Utils.chooseString();
@@ -167,5 +265,13 @@ public class UserManagement {
 			System.err.println("User not created.");
 		}
 	}
-
+	public static void printReview(User newUser) {
+		Utils.printHeader("Review");
+		String format = "%-15s %-10s\n";
+		System.out.printf(format, "First Name: ", newUser.getFirstName());
+		System.out.printf(format, "Last Name: ", newUser.getLastName());
+		System.out.printf(format, "Email: ", newUser.getEmail());
+		System.out.printf(format, "Role: ", newUser.getRole());
+		Utils.printClose();
+	}
 }
