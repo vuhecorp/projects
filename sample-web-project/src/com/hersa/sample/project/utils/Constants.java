@@ -7,16 +7,25 @@ public class Constants {
 	public static final String AUTH_PROVIDER = "chat_db";
 	public static final String USER_PROVIDER = "chat_db";
 	//CommandLine menu options
-	public static String[] MAIN_MENU_OPTIONS = {"List Users","Add User","Delete User", "Edit User", "Unlock User"};
-	public static String[] RETURN_MENU_OPTIONS = {"Run Again","Return to Main Menu","Exit"};
+	public static String[] MAIN_MENU_OPTIONS = {"User Management","Log Out"};
+	public static String[] USER_MAIN_MENU_OPTIONS = {"List Users","Add User","Delete User", "Edit User", "Unlock User", "Log Out"};
+	public static String[] RETURN_MENU_OPTIONS = {"Run Again","Return to Menu","Return to Main Menu","Log Out"};
 	public static String[] ROLE_MENU_OPTIONS = {"user","admin","sysAdmin"};
-
+	public static String[] EDIT_USER_PROPERTY_OPTIONS = {"Keep value", "Enter new value."};
+	
 	public static String getAUTH_PROVIDER() {
 		return AUTH_PROVIDER;
 	}
 
 	public static String getUSER_PROVIDER() {
 		return USER_PROVIDER;
+	}
+	public static List<String> getUserMainMenuOptionsList(){
+		List<String> list = new ArrayList<String>();
+		for (String string : USER_MAIN_MENU_OPTIONS) {
+			list.add(string);
+		}
+		return list;
 	}
 	public static List<String> getMainMenuOptionsList(){
 		List<String> list = new ArrayList<String>();
@@ -40,5 +49,11 @@ public class Constants {
 		}
 		return list;
 	}
-	
+	public static List<String> getEditUserPropertyMenuOptions(){
+		List<String> list = new ArrayList<String>();
+		for (String string : EDIT_USER_PROPERTY_OPTIONS) {
+			list.add(string);
+		}
+		return list;
+	}
 }
