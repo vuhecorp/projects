@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.hersa.sample.project.dao.user.SaveUserNames;
 import com.hersa.sample.project.dao.user.User;
 import com.hersa.sample.project.utils.Constants;
 
@@ -30,6 +31,9 @@ public class UserManager extends AbstractBaseManager{
 	public void updateUser(User user){
 		this.getUserDAO().updateUser(user);
 	}
+	public void updateUserSignon(User user){
+		this.getUserDAO().updateUserSignonInfo(user);
+	}
 	public List<User> retrieveAllUsers(){
 		List<User> userList = new ArrayList<User>();
 		User[] userArray = this.getUserDAO().listAllUsers();
@@ -38,6 +42,10 @@ public class UserManager extends AbstractBaseManager{
 				userList.add(userArray[i]);
 			}
 		}
+		
+		SaveUserNames saveNames = new SaveUserNames(userList);
+		Thread saveThread = new Thread(saveNames);
+		saveThread.start();
 		return userList;
 	}
 	public void createUser(User user) throws SQLException{

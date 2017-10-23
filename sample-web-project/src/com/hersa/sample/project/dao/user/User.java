@@ -1,8 +1,15 @@
 package com.hersa.sample.project.dao.user;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Date;
 
-public class User {
+public class User implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7511955582123319577L;
+
 	private int id;
 	private String firstName;
 	private String lastName;
@@ -17,6 +24,10 @@ public class User {
 	private int locked;
 	private Timestamp lockedOn;
 	private Timestamp firstFailed;
+	private String createdBy;
+	private String modifiedBy;
+	private Date modifiedDate;
+	private String userName;
 
 
 	public User() {
@@ -136,6 +147,46 @@ public class User {
 
 	public void setFirstFailed(Timestamp firstFailed) {
 		this.firstFailed = firstFailed;
+	}
+
+
+	public String getCreatedBy() {
+		return createdBy;
+	}
+
+
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+
+
+	public String getModifiedBy() {
+		return modifiedBy;
+	}
+
+
+	public void setModifiedBy(String modifiedBy) {
+		this.modifiedBy = modifiedBy;
+	}
+
+
+	public Date getModifiedDate() {
+		return modifiedDate;
+	}
+
+
+	public void setModifiedDate(Date modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}
+
+
+	public String getUserName() {
+		return userName;
+	}
+
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 

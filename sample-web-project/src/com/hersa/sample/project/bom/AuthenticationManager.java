@@ -75,7 +75,7 @@ public class AuthenticationManager {
 					//user gets 4 attempts on the hour.
 					totalTries = 0;
 					user.setFailedAttempts(totalTries);
-					um.updateUser(user);
+					um.updateUserSignon(user);
 				}
 				int userLocked = user.getLocked();
 				//if the user is not locked, proceed with authentication.
@@ -85,7 +85,7 @@ public class AuthenticationManager {
 					if (user.getRecentUnlock() == 1) {
 						totalTries = 0;
 						user.setRecentUnlock(0);
-						um.updateUser(user);
+						um.updateUserSignon(user);
 					}
 					if (totalTries < MAX_TRIES) {
 						if (totalTries > 2) {
@@ -97,7 +97,7 @@ public class AuthenticationManager {
 
 							totalTries = 0;
 							user.setFailedAttempts(0);
-							um.updateUser(user);
+							um.updateUserSignon(user);
 							return user;
 						}else{
 							//authentication failed.
@@ -107,13 +107,13 @@ public class AuthenticationManager {
 							}
 							user.setFailedAttempts(totalTries);
 							user.setLastFailed(currentTimeStamp);
-							um.updateUser(user);
+							um.updateUserSignon(user);
 						}
 					}else{
 						//lock user if attempts threshold is reached.
 						user.setLocked(1);
 						user.setLockedOn(currentTimeStamp);
-						um.updateUser(user);
+						um.updateUserSignon(user);
 						throw new Exception("You have reached the max number of attempts. Your account has been locked out.");
 //						FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Info", "You have "
 //								+ "reached the max number of attempts. Your account has been locked out."));
@@ -137,6 +137,6 @@ public class AuthenticationManager {
 		user.setLocked(0);
 		user.setRecentUnlock(1);
 		user.setFailedAttempts(0);
-		um.updateUser(user);
+		um.updateUserSignon(user);
 	}
 }

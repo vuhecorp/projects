@@ -12,12 +12,13 @@ public class DefaultConnectionProvider {
 	private static Connection connection;
 	
 	public static Connection setConnectionProvider(String schema){
+	//	String connectionUrl = "jdbc:mysql://localhost:3306/" + schema + "?autoReconnect=true&useSSL=false";
 		String connectionUrl = "jdbc:mysql://localhost:3306/" + schema + "?autoReconnect=true&useSSL=false";
 		connection = null;
 		
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			connection = DriverManager.getConnection(connectionUrl, "user", "root");
+			connection = DriverManager.getConnection(connectionUrl, "root", "A1128857795!");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

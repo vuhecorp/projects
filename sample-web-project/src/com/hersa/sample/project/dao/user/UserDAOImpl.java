@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,11 +22,14 @@ public class UserDAOImpl implements UserDAO {
 	private String prefix = Constants.USER_PROVIDER;
 	private String sqlSelect = "SELECT * FROM " + prefix + "." + tableName + " WHERE email = ?;";
 	private String sqlUpdate = "UPDATE " + prefix + "." + tableName + " SET fname = ?, lname = ?, password = ?, email = ?, isActive = ?, "
-								+ "profileImage = ?, role = ?, recentunlock = ?, failedattempts = ?, lastfailed = ?, locked = ?, lockedon = ?, firstfailed = ? ";
+								+ "profileImage = ?, role = ?, recentunlock = ?, failedattempts = ?, lastfailed = ?, locked = ?, lockedon = ?, firstfailed = ?, "
+								+ "modifiedby = ?, modifieddate = ?, username = ? ";
+	private String sqlUpdateSignOn = "UPDATE " + prefix + "." + tableName + " SET fname = ?, lname = ?, password = ?, email = ?, isActive = ?, "
+			+ "profileImage = ?, role = ?, recentunlock = ?, failedattempts = ?, lastfailed = ?, locked = ?, lockedon = ?, firstfailed = ?, ";
 	private String sqlSelectAll = "SELECT * FROM " + prefix + "." + tableName + ";";
 	private String sqlDelete = "DELETE FROM " + prefix + "." + tableName + " WHERE id = ?;";
-	private String sqlCreate = "INSERT INTO " + prefix + "." + tableName + " (fname, lname, password, email, role)"
-								+ " VALUES (?,?,?,?,?);";
+	private String sqlCreate = "INSERT INTO " + prefix + "." + tableName + " (fname, lname, password, email, role, createdby, username)"
+								+ " VALUES (?,?,?,?,?,?,?);";
 	private String sqlSelectLocked = "SELECT * FROM " + prefix + "." + tableName + " WHERE locked = ?;";
 	public UserDAOImpl() {
 		// TODO Auto-generated constructor stub
@@ -35,23 +39,28 @@ public class UserDAOImpl implements UserDAO {
 	public void updateUser(User user) {
 		String whereClause = "WHERE id = ?;";
 		try {
+			int i = 1;
 			PreparedStatement statement = connection.prepareStatement(sqlUpdate + whereClause);
-			statement.setString(1, user.getFirstName());
-			statement.setString(2, user.getLastName());
-			statement.setString(3, user.getPassword());
-			statement.setString(4, user.getEmail());
-			statement.setInt(5, user.getActive());
-			statement.setString(6, user.getImagePath());
-			statement.setString(7, user.getRole());
-			statement.setInt(8, user.getRecentUnlock());
-			statement.setInt(9, user.getFailedAttempts());
-			statement.setTimestamp(10, user.getLastFailed());
-			statement.setInt(11, user.getLocked());
-			statement.setTimestamp(12, user.getLockedOn());
-			statement.setTimestamp(13, user.getFirstFailed());
+			statement.setString(i++, user.getFirstName());
+			statement.setString(i++, user.getLastName());
+			statement.setString(i++, user.getPassword());
+			statement.setString(i++, user.getEmail());
+			statement.setInt(i++, user.getActive());
+			statement.setString(i++, user.getImagePath());
+			statement.setString(i++, user.getRole());
+			statement.setInt(i++, user.getRecentUnlock());
+			statement.setInt(i++, user.getFailedAttempts());
+			statement.setTimestamp(i++, user.getLastFailed());
+			statement.setInt(i++, user.getLocked());
+			statement.setTimestamp(i++, user.getLockedOn());
+			statement.setTimestamp(i++, user.getFirstFailed());
+			statement.setString(i++, user.getModifiedBy());
+			Timestamp stamp = new Timestamp(user.getModifiedDate().getTime());
+			statement.setTimestamp(i++, stamp);
+			statement.setString(i++, user.getUserName());
 			/***SET WHERE PARAM**/
 			
-			statement.setInt(14, user.getId());
+			statement.setInt(i++, user.getId());
 			statement.execute();
 		} catch (SQLException e) {
 			System.err.println("<<<<<<---- " + e.getMessage());
@@ -91,6 +100,10 @@ public class UserDAOImpl implements UserDAO {
 				user.setLocked(results.getInt("locked"));
 				user.setLockedOn(results.getTimestamp("lockedon"));
 				user.setFirstFailed(results.getTimestamp("firstfailed"));
+				user.setCreatedBy(results.getString("createdby"));
+				user.setModifiedBy(results.getString("modifiedby"));
+				user.setModifiedDate(results.getTimestamp("modifieddate"));
+				user.setUserName(results.getString("username"));
 				userList.add(user);
 			}
 			
@@ -128,6 +141,10 @@ public class UserDAOImpl implements UserDAO {
 				user.setLocked(results.getInt("locked"));
 				user.setLockedOn(results.getTimestamp("lockedon"));
 				user.setFirstFailed(results.getTimestamp("firstfailed"));
+				user.setCreatedBy(results.getString("createdby"));
+				user.setModifiedBy(results.getString("modifiedby"));
+				user.setModifiedDate(results.getTimestamp("modifieddate"));
+				user.setUserName(results.getString("username"));
 				userList.add(user);
 			}
 			if (userList.size() > 0) {
@@ -171,12 +188,15 @@ public class UserDAOImpl implements UserDAO {
 	@Override
 	public void createUser(User user) throws SQLException {
 		try {
+			int i = 1;
 			PreparedStatement statement = connection.prepareStatement(sqlCreate);
-			statement.setString(1, user.getFirstName());
-			statement.setString(2, user.getLastName());
-			statement.setString(3, user.getPassword());
-			statement.setString(4, user.getEmail());
-			statement.setString(5, user.getRole());
+			statement.setString(i++, user.getFirstName());
+			statement.setString(i++, user.getLastName());
+			statement.setString(i++, user.getPassword());
+			statement.setString(i++, user.getEmail());
+			statement.setString(i++, user.getRole());
+			statement.setString(i++, user.getCreatedBy());
+			statement.setString(i++, user.getUserName());
 			
 			statement.execute();
 		} catch (SQLException e) {
@@ -214,6 +234,10 @@ public class UserDAOImpl implements UserDAO {
 				user.setLocked(results.getInt("locked"));
 				user.setLockedOn(results.getTimestamp("lockedon"));
 				user.setFirstFailed(results.getTimestamp("firstfailed"));
+				user.setCreatedBy(results.getString("createdby"));
+				user.setModifiedBy(results.getString("modifiedby"));
+				user.setModifiedDate(results.getTimestamp("modifieddate"));
+				user.setUserName(results.getString("username"));
 				userList.add(user);
 			}
 			
@@ -224,6 +248,40 @@ public class UserDAOImpl implements UserDAO {
 			 DefaultConnectionProvider.closeConnection(connection);
 		}
 		return userList;
+	}
+	@Override
+	public void updateUserSignonInfo(User user) {
+		String whereClause = "WHERE id = ?;";
+		try {
+			int i = 1;
+			PreparedStatement statement = connection.prepareStatement(sqlUpdateSignOn + whereClause);
+			statement.setString(i++, user.getFirstName());
+			statement.setString(i++, user.getLastName());
+			statement.setString(i++, user.getPassword());
+			statement.setString(i++, user.getEmail());
+			statement.setInt(i++, user.getActive());
+			statement.setString(i++, user.getImagePath());
+			statement.setString(i++, user.getRole());
+			statement.setInt(i++, user.getRecentUnlock());
+			statement.setInt(i++, user.getFailedAttempts());
+			statement.setTimestamp(i++, user.getLastFailed());
+			statement.setInt(i++, user.getLocked());
+			statement.setTimestamp(i++, user.getLockedOn());
+			statement.setTimestamp(i++, user.getFirstFailed());
+		
+			/***SET WHERE PARAM**/
+			
+			statement.setInt(i++, user.getId());
+			statement.execute();
+		} catch (SQLException e) {
+			System.err.println("<<<<<<---- " + e.getMessage());
+			
+			
+		}finally{
+			DefaultConnectionProvider.closeConnection(connection);
+		}
+		
+		
 	}
 
 	

@@ -12,6 +12,7 @@ public interface UserDAO {
 	public void setConnection(Connection connection);
 	public List<User> retrieveUserByEmail(String Username);
 	public void updateUser(User user);
+	public void updateUserSignonInfo(User user);
 	public void deleteUser(User user) throws SQLException;
 	public void createUser(User user) throws SQLException;
 	public List<User> listByLocked(int active) throws SQLException;
