@@ -17,7 +17,7 @@ import com.hersa.sample.project.utils.Constants;
 public class UserDAOImpl implements UserDAO {
 	final static Logger logger = Logger.getLogger(UserDAOImpl.class);
 
-	private String tableName = "users";
+	private String tableName = Constants.USERS;
 	private Connection connection;
 	private String prefix = Constants.USER_PROVIDER;
 	private String sqlSelect = "SELECT * FROM " + prefix + "." + tableName + " WHERE email = ?;";

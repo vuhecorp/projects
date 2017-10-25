@@ -62,6 +62,7 @@ public class UserManagerPage implements Serializable {
 		if (validateUser(newUser)) {
 			try {
 				newUser.setCreatedBy(sessionUser.getUserName());
+				newUser = userToLower(newUser);
 				um.createUser(newUser);
 				loadUsers();
 				resetNewUserPanel();
@@ -86,6 +87,7 @@ public class UserManagerPage implements Serializable {
 		try {
 			selectedUser.setModifiedBy(sessionUser.getUserName());
 			selectedUser.setModifiedDate(new Date());
+			selectedUser = userToLower(selectedUser);
 			um.updateUser(selectedUser);
 			loadUsers();
 			StaticMethodUtils.addFacesMessage(FacesMessage.SEVERITY_INFO,"Success!", "User has been updated successfully.");
@@ -107,6 +109,19 @@ public class UserManagerPage implements Serializable {
 	/* ========================================================
 	 * Auxiliary Methods
 	 * =======================================================*/
+	public User userToLower(User user) {
+		String userName = user.getUserName().toLowerCase().trim();
+		String fname = user.getFirstName().toLowerCase().trim();
+		String lname = user.getLastName().toLowerCase().trim();
+		String email = user.getEmail().toLowerCase().trim();
+		
+		user.setUserName(userName);
+		user.setFirstName(fname);
+		user.setLastName(lname);
+		user.setEmail(email);
+		
+		return user;
+	}
 	public void initializeVariables(){
 		sessionUser = new User();
 		dispNewUserPanel = false;

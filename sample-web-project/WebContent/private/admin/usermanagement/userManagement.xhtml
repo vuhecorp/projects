@@ -52,8 +52,11 @@ lang="en">
 		                			<p:panel id="newUserInfo"
 		                				 styleClass="newUserInfoPanel"
 		                				 rendered="#{userManagementBean.dispNewUserPanel}">
+		                			<div>
+		                				<h3>New User Information</h3>
+		                			</div>	 
 		                			<div style="overflow: hidden">	 
-		                		
+		                			
 		                			<div class="leftColumn">
 										<p:panelGrid columns="1" layout="grid"
 											styleClass="ui-panelgrid-blank">
@@ -201,7 +204,9 @@ lang="en">
 												   rendered="#{user.locked == 0}"/>	                			
 	                			</p:column>
 	                			<p:column headerText="Locked On">
-									<p:outputLabel value="#{user.lockedOn}"/>		                			
+									<p:outputLabel value="#{user.lockedOn}">
+										<f:convertDateTime pattern = "MM/dd/yyyy hh:mm:ss" />
+									</p:outputLabel>		                			
 	                			</p:column>
 	                			<p:column styleClass="deleteColumn">
 									<p:commandLink icon="ui-icon-trash"
@@ -285,7 +290,9 @@ lang="en">
 													<p:outputLabel value="Modified Date: " />
 												</p:column>
 												<p:column>
-													<p:outputLabel value="#{user.modifiedDate}"/>
+													<p:outputLabel value="#{user.modifiedDate}">
+														<f:convertDateTime pattern = "MM/dd/yyyy hh:mm:ss" />
+													</p:outputLabel>
 												</p:column>
 												<p:column>
 													<p:outputLabel value="Account Status: " />

@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Constants {
-	public static final String AUTH_PROVIDER = "chat_db";
-	public static final String USER_PROVIDER = "chat_db";
+	public static final String AUTH_PROVIDER = "sample_project";
+	public static final String USER_PROVIDER = "sample_project";
+	
+	public static final String USERS = "users";
+	public static final String USER_PROFILE = "userprofile";
 	//CommandLine menu options
 	public static String[] MAIN_MENU_OPTIONS = {"User Management","Log Out"};
 	public static String[] USER_MAIN_MENU_OPTIONS = {"List Users","Add User","Delete User", "Edit User", "Unlock User", "Log Out"};
