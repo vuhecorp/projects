@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.hersa.sample.project.DuplicateUserException;
 import com.hersa.sample.project.bom.DefaultConnectionProvider;
 import com.hersa.sample.project.utils.Constants;
 
@@ -25,7 +26,7 @@ public class UserDAOImpl implements UserDAO {
 								+ "profileImage = ?, role = ?, recentunlock = ?, failedattempts = ?, lastfailed = ?, locked = ?, lockedon = ?, firstfailed = ?, "
 								+ "modifiedby = ?, modifieddate = ?, username = ? ";
 	private String sqlUpdateSignOn = "UPDATE " + prefix + "." + tableName + " SET fname = ?, lname = ?, password = ?, email = ?, isActive = ?, "
-			+ "profileImage = ?, role = ?, recentunlock = ?, failedattempts = ?, lastfailed = ?, locked = ?, lockedon = ?, firstfailed = ?, ";
+			+ "profileImage = ?, role = ?, recentunlock = ?, failedattempts = ?, lastfailed = ?, locked = ?, lockedon = ?, firstfailed = ?  ";
 	private String sqlSelectAll = "SELECT * FROM " + prefix + "." + tableName + ";";
 	private String sqlDelete = "DELETE FROM " + prefix + "." + tableName + " WHERE id = ?;";
 	private String sqlCreate = "INSERT INTO " + prefix + "." + tableName + " (fname, lname, password, email, role, createdby, username)"
@@ -37,7 +38,7 @@ public class UserDAOImpl implements UserDAO {
 	}
 	@Override
 	public void updateUser(User user) {
-		String whereClause = "WHERE id = ?;";
+		String whereClause = "WHERE id = ?";
 		try {
 			int i = 1;
 			PreparedStatement statement = connection.prepareStatement(sqlUpdate + whereClause);
@@ -55,7 +56,13 @@ public class UserDAOImpl implements UserDAO {
 			statement.setTimestamp(i++, user.getLockedOn());
 			statement.setTimestamp(i++, user.getFirstFailed());
 			statement.setString(i++, user.getModifiedBy());
-			Timestamp stamp = new Timestamp(user.getModifiedDate().getTime());
+			Timestamp stamp = null;
+			try {
+				stamp = new Timestamp(user.getModifiedDate().getTime());
+			} catch (Exception e) {
+				;;
+			}
+			
 			statement.setTimestamp(i++, stamp);
 			statement.setString(i++, user.getUserName());
 			/***SET WHERE PARAM**/
@@ -186,7 +193,7 @@ public class UserDAOImpl implements UserDAO {
 		}
 	}
 	@Override
-	public void createUser(User user) throws SQLException {
+	public void createUser(User user) throws SQLException, DuplicateUserException {
 		try {
 			int i = 1;
 			PreparedStatement statement = connection.prepareStatement(sqlCreate);
@@ -201,6 +208,12 @@ public class UserDAOImpl implements UserDAO {
 			statement.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			if (e.getMessage().contains("Duplicate entry")) {
+				if (e.getMessage().contains("username_UNIQUE")) {
+					throw new DuplicateUserException("The username specified is already taken.");
+				}
+				throw new DuplicateUserException("The email specified is already taken.");
+			}
 			throw new SQLException("Error in database connectivity.");
 		}finally{
 			DefaultConnectionProvider.closeConnection(connection);

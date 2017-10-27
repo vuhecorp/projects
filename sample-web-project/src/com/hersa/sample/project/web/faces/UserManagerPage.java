@@ -15,6 +15,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import com.hersa.sample.project.DuplicateUserException;
 import com.hersa.sample.project.bom.UserManager;
 import com.hersa.sample.project.dao.user.User;
 import com.hersa.sample.project.utils.StaticMethodUtils;
@@ -69,6 +70,9 @@ public class UserManagerPage implements Serializable {
 				StaticMethodUtils.addFacesMessage(FacesMessage.SEVERITY_INFO, "Success!", "User has been created successfully.");
 			} catch (SQLException e) {
 				StaticMethodUtils.addFacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "User could not be created.");
+				e.printStackTrace();
+			} catch (DuplicateUserException e) {
+				StaticMethodUtils.addFacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", e.getMessage());
 				e.printStackTrace();
 			}
 		}

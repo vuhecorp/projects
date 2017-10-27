@@ -20,10 +20,11 @@ import com.hersa.sample.project.dao.user.User;
 public class AuthenticationManager {
 	
 	private final int MAX_TRIES = 4;
-	private final int LOCKOUT_DURATION = (60 *24); //lockout duration.
-	private final int MAX_TRIAL_PERIOD_MIN = 60; //minutes after which the failed attempts resets to 0;
+	private final int LOCKOUT_DURATION = (60 *24); //lockout duration. == (60 *24)
+	private final int MAX_TRIAL_PERIOD_MIN = 60; //minutes after which the failed attempts resets to 0; == 60
 	public  int totalTries;
 	UserManager um = new UserManager();
+	private String previousUser = null;
 	
 	public AuthenticationManager(){
 		totalTries = 0;
@@ -35,6 +36,14 @@ public class AuthenticationManager {
 		Timestamp currentTimeStamp = new Timestamp(now.getTime());
 			try {
 				user = um.getUserByUsername(email);
+				if (previousUser == null) {
+					previousUser = user.getEmail();
+				}else {
+					if (!previousUser.equals(user.getEmail())) {
+						totalTries = 0;
+						previousUser = user.getEmail();
+					}
+				}
 			} catch (Exception e) {;;}
 			if (user != null) {
 				//set user login history
@@ -54,9 +63,15 @@ public class AuthenticationManager {
 					minSinceLastFailed = ((now.getTime() - lastFailedDate.getTime())/1000) /60;
 				    minSinceLastLocked = ((now.getTime() - lockedOnDate.getTime())/1000) /60;
 				    minSinceFirstFailed = ((now.getTime() - firstFailedDate.getTime())/1000) /60;
+				    
+				    try {
+						totalTries = failedAttempts;
+					} catch (Exception e) {
+						// TODO: handle exception
+					}
 				} catch (Exception e) {
 					;;
-				}
+				}	
 				
 				//check if the lockout period has expired, if true, unlock user.
 				if (locked == 1 && minSinceLastLocked >= 
@@ -64,6 +79,7 @@ public class AuthenticationManager {
 							minSinceLastFailed != -1) {
 					try {
 						resetUser(email);
+						user = um.getUserByUsername(email);
 						System.out.println("Elapsed time since lock-out exceeds " + LOCKOUT_DURATION +" minutes. user unlocked.");
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
@@ -94,7 +110,7 @@ public class AuthenticationManager {
 						}
 						if (user.getPassword().equals(Password)) {
 							//user authenticated
-
+							
 							totalTries = 0;
 							user.setFailedAttempts(0);
 							um.updateUserSignon(user);
@@ -102,6 +118,7 @@ public class AuthenticationManager {
 						}else{
 							//authentication failed.
 							totalTries++;
+							currentTimeStamp = new Timestamp(now.getTime());
 							if (totalTries == 1) {
 								user.setFirstFailed(currentTimeStamp);
 							}
@@ -112,6 +129,7 @@ public class AuthenticationManager {
 					}else{
 						//lock user if attempts threshold is reached.
 						user.setLocked(1);
+						currentTimeStamp = new Timestamp(now.getTime());
 						user.setLockedOn(currentTimeStamp);
 						um.updateUserSignon(user);
 						throw new Exception("You have reached the max number of attempts. Your account has been locked out.");

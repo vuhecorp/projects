@@ -38,11 +38,15 @@ body{
 	min-width:200px;
 }
 .deleteColumn {
-	width:20px !important;
+	width:20px;
 }
 .lockedColumn{
 	width:80px;		
 }
+.togglerColumn{
+	width:16px;	
+}
+
 
 	@media screen and (max-width: 600px) {
 	    body {
@@ -87,4 +91,9 @@ body{
 		.lockedColumn{
 		
 		}
+		.togglerColumn{
+			
+		}	
+	
 }
+

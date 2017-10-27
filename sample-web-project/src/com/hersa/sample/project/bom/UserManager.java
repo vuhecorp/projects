@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.hersa.sample.project.DuplicateUserException;
 import com.hersa.sample.project.dao.user.SaveUserNames;
 import com.hersa.sample.project.dao.user.User;
 import com.hersa.sample.project.utils.Constants;
@@ -31,7 +32,7 @@ public class UserManager extends AbstractBaseManager{
 	public void updateUser(User user){
 		this.getUserDAO().updateUser(user);
 	}
-	public void updateUserSignon(User user){
+	public void updateUserSignon(User user) throws Exception{
 		this.getUserDAO().updateUserSignonInfo(user);
 	}
 	public List<User> retrieveAllUsers(){
@@ -48,7 +49,7 @@ public class UserManager extends AbstractBaseManager{
 		saveThread.start();
 		return userList;
 	}
-	public void createUser(User user) throws SQLException{
+	public void createUser(User user) throws SQLException, DuplicateUserException{
 		this.getUserDAO().createUser(user);
 	}
 	public void deleteUser(User user) throws SQLException{

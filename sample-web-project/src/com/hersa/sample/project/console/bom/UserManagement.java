@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.hersa.sample.project.DuplicateUserException;
 import com.hersa.sample.project.bom.UserManager;
 import com.hersa.sample.project.console.Menu;
 import com.hersa.sample.project.console.utils.Utils;
@@ -258,6 +259,9 @@ public class UserManagement {
 				System.err.println("New user created.");
 			} catch (SQLException e) {
 				System.err.println(e.getMessage());
+				e.printStackTrace();
+			} catch (DuplicateUserException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}else {
