@@ -165,6 +165,7 @@ lang="en">
 									</p:outputPanel>
 								</f:facet>
 								<p:ajax event="rowToggle" onstart="test();"/> 
+								<p:remoteCommand name="updateTable" update="userTable"/>
 								<p:column styleClass="togglerColumn">
 									<p:rowToggler />
 								</p:column>

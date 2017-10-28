@@ -21,7 +21,9 @@ public class UserDAOImpl implements UserDAO {
 	private String tableName = Constants.USERS;
 	private Connection connection;
 	private String prefix = Constants.USER_PROVIDER;
-	private String sqlSelect = "SELECT * FROM " + prefix + "." + tableName + " WHERE email = ?;";
+	private String sqlSelect = "SELECT id, lname, fname, password, email, isactive, profileImage, "
+								+ "role, recentunlock, failedattempts, lastfailed, locked, lockedon, firstfailed, "
+								+ "createdby, modifiedby, modifieddate, username FROM " + prefix + "." + tableName + " WHERE email = ?;";
 	private String sqlUpdate = "UPDATE " + prefix + "." + tableName + " SET fname = ?, lname = ?, password = ?, email = ?, isActive = ?, "
 								+ "profileImage = ?, role = ?, recentunlock = ?, failedattempts = ?, lastfailed = ?, locked = ?, lockedon = ?, firstfailed = ?, "
 								+ "modifiedby = ?, modifieddate = ?, username = ? ";

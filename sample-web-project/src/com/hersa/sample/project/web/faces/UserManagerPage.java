@@ -4,14 +4,14 @@ import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
@@ -21,7 +21,7 @@ import com.hersa.sample.project.dao.user.User;
 import com.hersa.sample.project.utils.StaticMethodUtils;
 
 @ManagedBean(name="userManagementBean")
-@SessionScoped
+@ViewScoped
 public class UserManagerPage implements Serializable {
 
 	/**
@@ -46,6 +46,9 @@ public class UserManagerPage implements Serializable {
 	private String password1; //password
 	private String password2; //verification
 	public FacesContext context;
+	
+	private static final String CREATE = "create";
+	private static final String UPDATE = "update";
 
 	/*Message Strings*/
 	private String userBtnText;
@@ -60,7 +63,7 @@ public class UserManagerPage implements Serializable {
 		generateMaps();
 	}
 	public void createUser() {
-		if (validateUser(newUser)) {
+		if (validateUser(newUser, CREATE)) {
 			try {
 				newUser.setCreatedBy(sessionUser.getUserName());
 				newUser = userToLower(newUser);
@@ -87,18 +90,22 @@ public class UserManagerPage implements Serializable {
 			StaticMethodUtils.addFacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "User could not be unlocked.");
 		}
 	}
+	
 	public void updateUser(){
-		try {
-			selectedUser.setModifiedBy(sessionUser.getUserName());
-			selectedUser.setModifiedDate(new Date());
-			selectedUser = userToLower(selectedUser);
-			um.updateUser(selectedUser);
-			loadUsers();
-			StaticMethodUtils.addFacesMessage(FacesMessage.SEVERITY_INFO,"Success!", "User has been updated successfully.");
-		} catch (Exception e) {
-			StaticMethodUtils.addFacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "There was an error while updating this user." );
+		if (validateUser(selectedUser, UPDATE)) {
+			try {
+				selectedUser.setModifiedBy(sessionUser.getUserName());
+				selectedUser.setModifiedDate(new Date());
+				selectedUser = userToLower(selectedUser);
+				um.updateUser(selectedUser);
+				loadUsers();
+				StaticMethodUtils.addFacesMessage(FacesMessage.SEVERITY_INFO,"Success!", "User has been updated successfully.");
+			} catch (Exception e) {
+				StaticMethodUtils.addFacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "There was an error while updating this user." );
+			}
 		}
 	}
+	
 	public void deleteUser() {
 		try {
 			um.deleteUser(selectedUser);
@@ -133,10 +140,11 @@ public class UserManagerPage implements Serializable {
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
 		sessionUser = (User) session.getAttribute("User");
 		allUsersList = new ArrayList<User>();
-		userRoleMap = new HashMap<String, String>();
+		userRoleMap = new LinkedHashMap<String, String>();
 		context =  FacesContext.getCurrentInstance();
 	}
 	public void generateMaps(){
+		userRoleMap.put("--Select a Role--", "x");
 		userRoleMap.put("System Admin", "sysadmin");
 		userRoleMap.put("Admin", "admin");
 		userRoleMap.put("User", "user");
@@ -161,13 +169,21 @@ public class UserManagerPage implements Serializable {
 		password1 = new String();
 		password2 = new String();
 	}
-	private boolean validateUser(User user) {
+	private boolean validateUser(User user, String action) {
 		// validate user input
 		// for now, only validate passwords match;
 		boolean valid = true;
-		if(!validatePasswordMatch()) {
+		
+		if (action.equals(CREATE)) {
+			if(!validatePasswordMatch()) {
+				valid = false;
+				StaticMethodUtils.addFacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Passwords do not match.");
+			}
+		}
+		
+		if (user.getRole().equalsIgnoreCase("x")) {
 			valid = false;
-			StaticMethodUtils.addFacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Passwords do not match.");
+			StaticMethodUtils.addFacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Please select a Role.");
 		}
 		return valid;
 	}
