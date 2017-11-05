@@ -18,41 +18,42 @@ public class UserManagement {
 	 * Business Functions
 	 * ================================================================================================*/
 	
-	public static void unlockUser() {
-		UserManager um = new UserManager();
-		Map<String, Object> map = Menu.printLockedUserList();
-		int numOptions = (int) map.get("numOptions");
-		@SuppressWarnings("unchecked")
-		List<User> userList = (List<User>) map.get("userList");
-		if (numOptions > 0) {
-			Utils.printValue("Select a user to unlock: ");
-			int choice = Utils.chooseInt();
-			choice = Utils.validateIntChoice(choice, numOptions);
-			User user = userList.get(choice - 1);
-			
-			Utils.printValue("User to unlock: " + userList.get(choice - 1).getLastName() 
-					  + " , " + userList.get(choice - 1).getFirstName());
-			Utils.printValue("Unlock User?: Y/N");
-			String choice1 = Utils.chooseString();
-			boolean boolChoice1 = Utils.validateBoolean(choice1);
-			if (boolChoice1) {
-			try {
-			um.resetUser(user);
-			System.err.println("User unlocked.");
-			} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			}else {
-			System.err.println("User not unlocked.");
-			}
-		}else{
-			Utils.printValue("There are no locked users.");
-		}
-	}
+//	public static void unlockUser() {
+//		UserManager um = new UserManager();
+//		Map<String, Object> map = Menu.printLockedUserList();
+//		int numOptions = (int) map.get("numOptions");
+//		@SuppressWarnings("unchecked")
+//		List<User> userList = (List<User>) map.get("userList");
+//		if (numOptions > 0) {
+//			Utils.printValue("Select a user to unlock: ");
+//			int choice = Utils.chooseInt();
+//			choice = Utils.validateIntChoice(choice, numOptions);
+//			User user = userList.get(choice - 1);
+//			
+//			Utils.printValue("User to unlock: " + userList.get(choice - 1).getLastName() 
+//					  + " , " + userList.get(choice - 1).getFirstName());
+//			Utils.printValue("Unlock User?: Y/N");
+//			String choice1 = Utils.chooseString();
+//			boolean boolChoice1 = Utils.validateBoolean(choice1);
+//			if (boolChoice1) {
+//			try {
+//			um.resetUser(user);
+//			System.err.println("User unlocked.");
+//			} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//			} catch (Exception e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			}else {
+//			System.err.println("User not unlocked.");
+//			}
+//		}else{
+//			Utils.printValue("There are no locked users.");
+//		}
+//	}
+	
 	public static void editUser() {
 		UserManager um = new UserManager();
 		//print user list to select a user.
@@ -81,7 +82,12 @@ public class UserManagement {
 		String keep = Utils.chooseString();
 		boolean boolKeep = Utils.validateBoolean(keep);
 		if (boolKeep) {
-			um.updateUser(editUser);
+			try {
+				um.updateUser(editUser);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			System.err.println("User information has been update.");
 		}else {
 			System.err.println("Update canceled.");
@@ -195,34 +201,34 @@ public class UserManagement {
 		map.put("Role", user.getRole());
 		return map;
 	}
-	public static void deleteUser() {
-		UserManager um = new UserManager();
-		Map<String, Object> map = Menu.printAllUserList();
-		int numOptions = (int) map.get("numOptions");
-		
-		@SuppressWarnings("unchecked")
-		List<User> userList = (List<User>) map.get("userList");
-		Utils.printValue("Select a user to delete: ");
-		int choice = Utils.chooseInt();
-		choice = Utils.validateIntChoice(choice, numOptions);
-		User userDelete = userList.get(choice - 1);
-		Utils.printValue("User to delete: " + userDelete.getLastName() 
-									  + " , " + userDelete.getFirstName());
-		Utils.printValue("Delete User?: Y/N");
-		String choice1 = Utils.chooseString();
-		boolean boolChoice1 = Utils.validateBoolean(choice1);
-		if (boolChoice1) {
-			try {
-				um.deleteUser(userList.get(choice - 1));
-				System.err.println("User deleted.");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}else {
-			System.err.println("User not deleted.");
-		}
-	}
+//	public static void deleteUser() {
+//		UserManager um = new UserManager();
+//		Map<String, Object> map = Menu.printAllUserList();
+//		int numOptions = (int) map.get("numOptions");
+//		
+//		@SuppressWarnings("unchecked")
+//		List<User> userList = (List<User>) map.get("userList");
+//		Utils.printValue("Select a user to delete: ");
+//		int choice = Utils.chooseInt();
+//		choice = Utils.validateIntChoice(choice, numOptions);
+//		User userDelete = userList.get(choice - 1);
+//		Utils.printValue("User to delete: " + userDelete.getLastName() 
+//									  + " , " + userDelete.getFirstName());
+//		Utils.printValue("Delete User?: Y/N");
+//		String choice1 = Utils.chooseString();
+//		boolean boolChoice1 = Utils.validateBoolean(choice1);
+//		if (boolChoice1) {
+//			try {
+//				um.deleteUser(userList.get(choice - 1));
+//				System.err.println("User deleted.");
+//			} catch (SQLException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}else {
+//			System.err.println("User not deleted.");
+//		}
+//	}
 	public static void addUser() {
 		Utils.printHeader("New User");
 		User newUser = new User();

@@ -148,14 +148,14 @@ lang="en">
 	                		<p:dataTable id="userTable"
 	                					 widgetVar="userTableWidget"
 	                					 liveResize="true"
-	                					 value="#{userManagementBean.allUsersList}"
-	                					 filteredValue="#{userManagementBean.filteredUsers}"
+	                					 value="#{userManagementBean.userSignOnList}"
+	                					 filteredValue="#{userManagementBean.filteredUserSignOnList}"
 	                					 var="user"
 	                					 reflow="true"
 	                					 paginator="true"
 	                					 rows="10"
-	                					 rowKey="#{user.id}"
-	                					 expandedRow="#{user.id == userManagementBean.selectedUser.id}">
+	                					 rowKey="#{user.userDTO.id}"
+	                					 expandedRow="#{user.userDTO.id == userManagementBean.selectedUser.id}">
 								<f:facet name="header">
 									<p:outputPanel>
 										<h:outputText value="Search all fields:" />
@@ -170,44 +170,44 @@ lang="en">
 									<p:rowToggler />
 								</p:column>
 								<p:column headerText="User Name"
-										  filterBy="#{user.userName}"
+										  filterBy="#{user.userDTO.userName}"
 										  filterMatchMode="contains"
 										  filterStyle="display:none">
-									<p:outputLabel value="#{user.userName}"/>		                			
+									<p:outputLabel value="#{user.userDTO.userName}"/>		                			
 	                			</p:column>
 								<p:column headerText="First Name"
-										  filterBy="#{user.firstName}"
+										  filterBy="#{user.userDTO.firstName}"
 										  filterMatchMode="contains"
 										  filterStyle="display:none">
-									<p:outputLabel value="#{user.firstName}"/>		                			
+									<p:outputLabel value="#{user.userDTO.firstName}"/>		                			
 	                			</p:column>
 	                			<p:column headerText="Last Name"
-	                					  filterBy="#{user.lastName}"
+	                					  filterBy="#{user.userDTO.lastName}"
 										  filterMatchMode="contains"
 										  filterStyle="display:none">
-									<p:outputLabel value="#{user.lastName}"/>		                			
+									<p:outputLabel value="#{user.userDTO.lastName}"/>		                			
 	                			</p:column>
 	                			<p:column headerText="Email"
-	                					  filterBy="#{user.email}"
+	                					  filterBy="#{user.userDTO.email}"
 										  filterMatchMode="contains"
 										  filterStyle="display:none">
-									<p:outputLabel value="#{user.email}"/>		                			
+									<p:outputLabel value="#{user.userDTO.email}"/>		                			
 	                			</p:column>
 	                			<p:column headerText="Role"
-	                					  filterBy="#{user.role}"
+	                					  filterBy="#{user.userDTO.role}"
 										  filterMatchMode="contains"
 										  filterStyle="display:none">
-									<p:outputLabel value="#{user.role}"/>		                			
+									<p:outputLabel value="#{user.userDTO.role}"/>		                			
 	                			</p:column>
 	                			<p:column headerText="Status"
 	                					  styleClass="lockedColumn">
 									<p:outputLabel value="Locked"
-												   rendered="#{user.locked == 1}" />
+												   rendered="#{user.userSignOnDTO.locked == 1}" />
 									<p:outputLabel value="Unlocked"
-												   rendered="#{user.locked == 0}"/>	                			
+												   rendered="#{user.userSignOnDTO.locked == 0}"/>	                			
 	                			</p:column>
 	                			<p:column headerText="Locked On">
-									<p:outputLabel value="#{user.lockedOn}">
+									<p:outputLabel value="#{user.userSignOnDTO.lockedOn}">
 										<f:convertDateTime pattern = "MM/dd/yyyy hh:mm:ss" />
 									</p:outputLabel>		                			
 	                			</p:column>
@@ -217,7 +217,7 @@ lang="en">
 												   action="#{userManagementBean.deleteUser}"
 												   update="userTable indexMainForm:msg"
 												   oncomplete="PF('userTableWidget').clearFilters()">
-										<f:setPropertyActionListener value="#{user}" 
+										<f:setPropertyActionListener value="#{user.userDTO}" 
 																 	 target="#{userManagementBean.selectedUser}"/>		   
 										<h:outputText value="Delete" 
 													  class="ui-icon ui-icon-trash"/>
@@ -243,25 +243,25 @@ lang="en">
 	                								<p:outputLabel value="User Name: "/>
 	                							</p:column>
 	                							<p:column>
-	                								<p:inputText value="#{user.userName}"/>
+	                								<p:inputText value="#{user.userDTO.userName}"/>
 	                							</p:column>
 	                							<p:column>
 	                								<p:outputLabel value="First Name: "/>
 	                							</p:column>
 	                							<p:column>
-	                								<p:inputText value="#{user.firstName}"/>
+	                								<p:inputText value="#{user.userDTO.firstName}"/>
 	                							</p:column>
 	                							<p:column>
 	                								<p:outputLabel value="Last Name: "/>
 	                							</p:column>
 	                							<p:column>
-	                								<p:inputText value="#{user.lastName}"/>
+	                								<p:inputText value="#{user.userDTO.lastName}"/>
 	                							</p:column>
 	                							<p:column>
 	                								<p:outputLabel value="Email: "/>
 	                							</p:column>
 	                							<p:column>
-	                								<p:inputText value="#{user.email}"/>
+	                								<p:inputText value="#{user.userDTO.email}"/>
 	                							</p:column>
 	                							
 	                						</p:panelGrid>
@@ -283,21 +283,21 @@ lang="en">
 															<p:outputLabel value="Created By: " />
 														</p:column>
 														<p:column>
-															<p:outputLabel value="#{user.createdBy}"
+															<p:outputLabel value="#{user.userDTO.createdBy}"
 																   style="font-style:italic;"/>
 														</p:column>
 														<p:column>
 															<p:outputLabel value="Modified By: " />
 														</p:column>
 														<p:column>
-															<p:outputLabel value="#{user.modifiedBy}"
+															<p:outputLabel value="#{user.userDTO.modifiedBy}"
 																	style="font-style:italic;"/>
 														</p:column>
 														<p:column>
 															<p:outputLabel value="Modified Date: " />
 														</p:column>
 														<p:column>
-															<p:outputLabel value="#{user.modifiedDate}">
+															<p:outputLabel value="#{user.userDTO.modifiedDate}">
 																<f:convertDateTime pattern = "MM/dd/yyyy" />
 															</p:outputLabel>
 														</p:column>
@@ -306,15 +306,15 @@ lang="en">
 														</p:column>
 														<p:column>
 															<p:outputLabel value="Locked"
-																   rendered="#{user.locked == 1}" />
+																   rendered="#{user.userSignOnDTO.locked == 1}" />
 															<p:outputLabel value="Unlocked"
-																   rendered="#{user.locked == 0}"/>
+																   rendered="#{user.userSignOnDTO.locked == 0}"/>
 														</p:column>
-														<p:column rendered="#{user.locked == 1}">
+														<p:column rendered="#{user.userSignOnDTO.locked == 1}">
 															<p:outputLabel value="Locked On: " />
 														</p:column>
-														<p:column rendered="#{user.locked == 1}">
-															<p:outputLabel value="#{user.lockedOn}" >
+														<p:column rendered="#{user.userSignOnDTO.locked == 1}">
+															<p:outputLabel value="#{user.userSignOnDTO.lockedOn}" >
 																<f:convertDateTime pattern = "MM/dd/yyyy" />
 															</p:outputLabel>
 														</p:column>
@@ -332,7 +332,7 @@ lang="en">
 																	 action="#{userManagementBean.updateUser}"
 																	 style="width:100px"
 																	 update="userTable indexMainForm:msg">
-														<f:setPropertyActionListener value="#{user}" 
+														<f:setPropertyActionListener value="#{user.userDTO}" 
 																					 target="#{userManagementBean.selectedUser}"/>
 													</p:commandButton>
 												</p:column>
@@ -340,11 +340,11 @@ lang="en">
 													<p:commandButton  value="Unlock"	
 																	  class="actionBtn"
 																	  style="width:100px;"
-																	  disabled="#{user.locked == 0}"
+																	  disabled="#{user.userSignOnDTO.locked == 0}"
 																	  action="#{userManagementBean.resetUser}"
 																	  update="userTable indexMainForm:msg"
 																	  oncomplete="PF('userTableWidget').clearFilters()">
-															<f:setPropertyActionListener value="#{user}" 
+															<f:setPropertyActionListener value="#{user.userDTO}" 
 																						 target="#{userManagementBean.selectedUser}"/>
 													</p:commandButton>
 												</p:column>

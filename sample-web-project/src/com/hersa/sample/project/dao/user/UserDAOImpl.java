@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +13,7 @@ import org.apache.log4j.Logger;
 
 import com.hersa.sample.project.DuplicateUserException;
 import com.hersa.sample.project.bom.DefaultConnectionProvider;
+import com.hersa.sample.project.dao.util.ConnectionProvider;
 import com.hersa.sample.project.utils.Constants;
 
 
@@ -20,44 +22,27 @@ public class UserDAOImpl implements UserDAO {
 
 	private String tableName = Constants.USERS;
 	private Connection connection;
-	private String prefix = Constants.USER_PROVIDER;
-	private String sqlSelect = "SELECT id, lname, fname, password, email, isactive, profileImage, "
-								+ "role, recentunlock, failedattempts, lastfailed, locked, lockedon, firstfailed, "
-								+ "createdby, modifiedby, modifieddate, username FROM " + prefix + "." + tableName + " WHERE email = ?;";
-	private String sqlUpdate = "UPDATE " + prefix + "." + tableName + " SET fname = ?, lname = ?, password = ?, email = ?, isActive = ?, "
-								+ "profileImage = ?, role = ?, recentunlock = ?, failedattempts = ?, lastfailed = ?, locked = ?, lockedon = ?, firstfailed = ?, "
-								+ "modifiedby = ?, modifieddate = ?, username = ? ";
-	private String sqlUpdateSignOn = "UPDATE " + prefix + "." + tableName + " SET fname = ?, lname = ?, password = ?, email = ?, isActive = ?, "
-			+ "profileImage = ?, role = ?, recentunlock = ?, failedattempts = ?, lastfailed = ?, locked = ?, lockedon = ?, firstfailed = ?  ";
-	private String sqlSelectAll = "SELECT * FROM " + prefix + "." + tableName + ";";
-	private String sqlDelete = "DELETE FROM " + prefix + "." + tableName + " WHERE id = ?;";
-	private String sqlCreate = "INSERT INTO " + prefix + "." + tableName + " (fname, lname, password, email, role, createdby, username)"
-								+ " VALUES (?,?,?,?,?,?,?);";
-	private String sqlSelectLocked = "SELECT * FROM " + prefix + "." + tableName + " WHERE locked = ?;";
+	private boolean setByCaller;
+	
 	public UserDAOImpl() {
 		// TODO Auto-generated constructor stub
-		
 	}
+	
 	@Override
-	public void updateUser(User user) {
-		String whereClause = "WHERE id = ?";
+	public void updateUser(User user) throws Exception {
+		String whereClause = "WHERE rowid = ?";
+		String sql = UserDB.UPDATE + whereClause;
 		try {
 			int i = 1;
-			PreparedStatement statement = connection.prepareStatement(sqlUpdate + whereClause);
+			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setString(i++, user.getFirstName());
 			statement.setString(i++, user.getLastName());
 			statement.setString(i++, user.getPassword());
 			statement.setString(i++, user.getEmail());
 			statement.setInt(i++, user.getActive());
-			statement.setString(i++, user.getImagePath());
 			statement.setString(i++, user.getRole());
-			statement.setInt(i++, user.getRecentUnlock());
-			statement.setInt(i++, user.getFailedAttempts());
-			statement.setTimestamp(i++, user.getLastFailed());
-			statement.setInt(i++, user.getLocked());
-			statement.setTimestamp(i++, user.getLockedOn());
-			statement.setTimestamp(i++, user.getFirstFailed());
 			statement.setString(i++, user.getModifiedBy());
+			statement.setString(i++, user.getUserName());
 			Timestamp stamp = null;
 			try {
 				stamp = new Timestamp(user.getModifiedDate().getTime());
@@ -69,11 +54,11 @@ public class UserDAOImpl implements UserDAO {
 			statement.setString(i++, user.getUserName());
 			/***SET WHERE PARAM**/
 			
-			statement.setInt(i++, user.getId());
+			statement.setLong(i++, user.getId());
 			statement.execute();
 		} catch (SQLException e) {
 			System.err.println("<<<<<<---- " + e.getMessage());
-			
+			throw new Exception("Could not update user.");
 			
 		}finally{
 			DefaultConnectionProvider.closeConnection(connection);
@@ -83,39 +68,18 @@ public class UserDAOImpl implements UserDAO {
 	}
 	@Override
 	public List<User> retrieveUserByEmail(String email) {
-		
 		List<User> userList = new ArrayList<User>();
-		
+		String whereClause = " WHERE email = ?";
+		String sql = UserDB.SELECT + whereClause;
 		try {
-			PreparedStatement statement = connection.prepareStatement(sqlSelect);
-			
+			PreparedStatement statement = connection.prepareStatement(sql);
 			statement.setString(1, email);
 			ResultSet results = statement.executeQuery();
-			
 			while(results.next()){
-
-				User user = new User();
-				user.setId(results.getInt("id"));
-				user.setFirstName(results.getString("fname"));
-				user.setLastName(results.getString("lname"));
-				user.setPassword(results.getString("password"));
-				user.setEmail(results.getString("email"));
-				user.setActive(results.getInt("isActive"));
-				user.setImagePath(results.getString("profileImage"));
-				user.setRole(results.getString("role"));
-				user.setRecentUnlock(results.getInt("recentunlock"));
-				user.setFailedAttempts(results.getInt("failedattempts"));
-				user.setLastFailed(results.getTimestamp("lastFailed"));
-				user.setLocked(results.getInt("locked"));
-				user.setLockedOn(results.getTimestamp("lockedon"));
-				user.setFirstFailed(results.getTimestamp("firstfailed"));
-				user.setCreatedBy(results.getString("createdby"));
-				user.setModifiedBy(results.getString("modifiedby"));
-				user.setModifiedDate(results.getTimestamp("modifieddate"));
-				user.setUserName(results.getString("username"));
+				User user = null;
+				user = extractUser(results);
 				userList.add(user);
 			}
-			
    		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -129,31 +93,13 @@ public class UserDAOImpl implements UserDAO {
 	public User[] listAllUsers() {
 		User[] users = null;
 		List<User> userList = new ArrayList<User>();
-		
+		String sql = UserDB.SELECT;
 		try {
-			PreparedStatement statement = connection.prepareStatement(sqlSelectAll);
+			PreparedStatement statement = connection.prepareStatement(sql);
 			ResultSet results = statement.executeQuery();
-			
 			while (results.next()) {
-				User user = new User();
-				user.setId(results.getInt("id"));
-				user.setFirstName(results.getString("fname"));
-				user.setLastName(results.getString("lname"));
-				user.setPassword(results.getString("password"));
-				user.setEmail(results.getString("email"));
-				user.setActive(results.getInt("isActive"));
-				user.setImagePath(results.getString("profileImage"));
-				user.setRole(results.getString("role"));
-				user.setRecentUnlock(results.getInt("recentunlock"));
-				user.setFailedAttempts(results.getInt("failedattempts"));
-				user.setLastFailed(results.getTimestamp("lastFailed"));
-				user.setLocked(results.getInt("locked"));
-				user.setLockedOn(results.getTimestamp("lockedon"));
-				user.setFirstFailed(results.getTimestamp("firstfailed"));
-				user.setCreatedBy(results.getString("createdby"));
-				user.setModifiedBy(results.getString("modifiedby"));
-				user.setModifiedDate(results.getTimestamp("modifieddate"));
-				user.setUserName(results.getString("username"));
+				User user = null;
+				user = extractUser(results);
 				userList.add(user);
 			}
 			if (userList.size() > 0) {
@@ -170,7 +116,7 @@ public class UserDAOImpl implements UserDAO {
 
 	@Override
 	public void setConnection(Connection connection) {
-		// TODO Auto-generated method stub
+		setByCaller = true;
 		this.connection = connection;
 		
 	}
@@ -185,8 +131,10 @@ public class UserDAOImpl implements UserDAO {
 	@Override
 	public void deleteUser(User user) throws SQLException {
 		PreparedStatement statement;
+		String whereClause = " WHERE rowid = ?";
+		String sql = UserDB.DELETE + whereClause;
 		try {
-			statement = connection.prepareStatement(sqlDelete);
+			statement = connection.prepareStatement(sql);
 			statement.setLong(1, user.getId());
 			statement.execute();
 		} catch (SQLException e) {
@@ -195,10 +143,12 @@ public class UserDAOImpl implements UserDAO {
 		}
 	}
 	@Override
-	public void createUser(User user) throws SQLException, DuplicateUserException {
+	public User createUser(User user) throws Exception {
+		User createdUser = null;
+		String sql = UserDB.CREATE;
 		try {
 			int i = 1;
-			PreparedStatement statement = connection.prepareStatement(sqlCreate);
+			PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			statement.setString(i++, user.getFirstName());
 			statement.setString(i++, user.getLastName());
 			statement.setString(i++, user.getPassword());
@@ -206,8 +156,14 @@ public class UserDAOImpl implements UserDAO {
 			statement.setString(i++, user.getRole());
 			statement.setString(i++, user.getCreatedBy());
 			statement.setString(i++, user.getUserName());
+			statement.executeUpdate();
+			ResultSet rs = statement.getGeneratedKeys();
 			
-			statement.execute();
+			if (rs.next()) {
+				createdUser = this.listUserById(rs.getInt(1));
+				System.err.println(createdUser.toString());
+			}
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			if (e.getMessage().contains("Duplicate entry")) {
@@ -218,87 +174,61 @@ public class UserDAOImpl implements UserDAO {
 			}
 			throw new SQLException("Error in database connectivity.");
 		}finally{
-			DefaultConnectionProvider.closeConnection(connection);
+			connection.close();
 		}
-		
-	}
-	@Override
-	public List<User> listByLocked(int locked) throws SQLException {
-	List<User> userList = new ArrayList<User>();
-		
-		try {
-			PreparedStatement statement = connection.prepareStatement(sqlSelectLocked);
-			
-			statement.setInt(1, locked);
-			ResultSet results = statement.executeQuery();
-			
-			while(results.next()){
-
-				User user = new User();
-				user.setId(results.getInt("id"));
-				user.setFirstName(results.getString("fname"));
-				user.setLastName(results.getString("lname"));
-				user.setPassword(results.getString("password"));
-				user.setEmail(results.getString("email"));
-				user.setActive(results.getInt("isActive"));
-				user.setImagePath(results.getString("profileImage"));
-				user.setRole(results.getString("role"));
-				user.setRecentUnlock(results.getInt("recentunlock"));
-				user.setFailedAttempts(results.getInt("failedattempts"));
-				user.setLastFailed(results.getTimestamp("lastFailed"));
-				user.setLocked(results.getInt("locked"));
-				user.setLockedOn(results.getTimestamp("lockedon"));
-				user.setFirstFailed(results.getTimestamp("firstfailed"));
-				user.setCreatedBy(results.getString("createdby"));
-				user.setModifiedBy(results.getString("modifiedby"));
-				user.setModifiedDate(results.getTimestamp("modifieddate"));
-				user.setUserName(results.getString("username"));
-				userList.add(user);
-			}
-			
-   		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}finally{
-			 DefaultConnectionProvider.closeConnection(connection);
-		}
-		return userList;
-	}
-	@Override
-	public void updateUserSignonInfo(User user) {
-		String whereClause = "WHERE id = ?;";
-		try {
-			int i = 1;
-			PreparedStatement statement = connection.prepareStatement(sqlUpdateSignOn + whereClause);
-			statement.setString(i++, user.getFirstName());
-			statement.setString(i++, user.getLastName());
-			statement.setString(i++, user.getPassword());
-			statement.setString(i++, user.getEmail());
-			statement.setInt(i++, user.getActive());
-			statement.setString(i++, user.getImagePath());
-			statement.setString(i++, user.getRole());
-			statement.setInt(i++, user.getRecentUnlock());
-			statement.setInt(i++, user.getFailedAttempts());
-			statement.setTimestamp(i++, user.getLastFailed());
-			statement.setInt(i++, user.getLocked());
-			statement.setTimestamp(i++, user.getLockedOn());
-			statement.setTimestamp(i++, user.getFirstFailed());
-		
-			/***SET WHERE PARAM**/
-			
-			statement.setInt(i++, user.getId());
-			statement.execute();
-		} catch (SQLException e) {
-			System.err.println("<<<<<<---- " + e.getMessage());
-			
-			
-		}finally{
-			DefaultConnectionProvider.closeConnection(connection);
-		}
-		
-		
+		return createdUser;
 	}
 
+	private User extractUser(ResultSet rs) throws SQLException {
+		User obj = new User();
+		int i = 1;
+		obj.setId(rs.getInt(i++));
+		obj.setFirstName(rs.getString(i++));
+		obj.setLastName(rs.getString(i++));
+		obj.setPassword(rs.getString(i++));
+		obj.setEmail(rs.getString(i++));
+		obj.setActive(rs.getInt(i++));
+		obj.setRole(rs.getString(i++));
+		obj.setCreatedBy(rs.getString(i++));
+		obj.setModifiedBy(rs.getString(i++));
+		obj.setModifiedDate(rs.getTimestamp(i++));
+		obj.setUserName(rs.getString(i++));
+		return obj;
+	}
 	
+	@Override
+	public User listUserById(int id) throws Exception {
+		User user = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String whereClause = " WHERE rowid = ?";
+		String sql = UserDB.SELECT + whereClause;
+		try {
+			stmt = connection.prepareStatement(sql);
+			stmt.setInt(1, id);
+			rs = stmt.executeQuery();
+			if (rs.next()) {
+				user = extractUser(rs);
+			}
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+			throw new Exception("Error retrieving user info.");
+		}finally {
+			connection.close();
+		}
+		return user;
+	}
+	@Override
+	public Connection getConnection() {
+		if (connection != null) {
+			return connection;
+		}
+		return DefaultConnectionProvider.setConnectionProvider(Constants.USER_PROVIDER);
+	}
+	@Override
+	public void setConnectionProvider(ConnectionProvider factory) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

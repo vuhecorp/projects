@@ -1,0 +1,7 @@
+17/10/30 22:02:40.226 main DEBUG UserSignOnDAO: Duplicate entry '59' for key 'userid_UNIQUE'
+17/10/30 22:03:29.267 main DEBUG UserSignOnDAO: Duplicate entry '59' for key 'userid_UNIQUE'
+17/10/30 22:16:06.024 main ERROR UserSignOnDAO: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '= 54, lastfailed= '2017-10-30 22:16:06.003', locked= 0, lockedon= '2017-10-30 22' at line 1
+17/10/30 22:18:38.223 main ERROR UserSignOnDAO: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '= 54, lastfailed= '2017-10-30 22:18:38.206', locked= 0, lockedon= '2017-10-30 22' at line 1
+17/10/30 22:19:25.470 main ERROR UserSignOnDAO: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '= 54, lastfailed= '2017-10-30 22:18:54.658', locked= 0, lockedon= '2017-10-30 22' at line 1
+17/10/30 22:19:33.927 main ERROR UserSignOnDAO: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '= 54, lastfailed= '2017-10-30 22:19:33.909', locked= 0, lockedon= '2017-10-30 22' at line 1
+17/10/30 22:20:27.670 main ERROR UserSignOnDAO: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '= 54, lastfailed= '2017-10-30 22:19:58.205', locked= 0, lockedon= '2017-10-30 22' at line 1

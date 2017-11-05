@@ -39,13 +39,13 @@ public class RunMenuOptions {
 			UserManagement.addUser();
 			break;
 		case 3:
-			UserManagement.deleteUser();
+//			UserManagement.deleteUser();
 			break;
 		case 4:
 			UserManagement.editUser();
 			break;
 		case 5:
-			UserManagement.unlockUser();
+//			UserManagement.unlockUser();
 			break;	
 		case 6:
 			CommandLine.logOut();

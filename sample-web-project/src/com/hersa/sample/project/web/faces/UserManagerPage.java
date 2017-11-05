@@ -17,7 +17,11 @@ import javax.servlet.http.HttpSession;
 
 import com.hersa.sample.project.DuplicateUserException;
 import com.hersa.sample.project.bom.UserManager;
+import com.hersa.sample.project.bom.UserSignOnManager;
+import com.hersa.sample.project.bom.UserSignOnVO;
 import com.hersa.sample.project.dao.user.User;
+import com.hersa.sample.project.dao.usersignon.UserSignOn;
+import com.hersa.sample.project.dao.usersignon.UserSignOnDeleteException;
 import com.hersa.sample.project.utils.StaticMethodUtils;
 
 @ManagedBean(name="userManagementBean")
@@ -39,6 +43,8 @@ public class UserManagerPage implements Serializable {
 	private User newUser;
 	private List<User> allUsersList;
 	private List<User> filteredUsers;
+	private List<UserSignOnVO> userSignOnList;
+	private List<UserSignOnVO> filteredUserSignOnList;
 	
 	private boolean dispNewUserPanel;
 	private Map<String, String> userRoleMap;
@@ -80,17 +86,32 @@ public class UserManagerPage implements Serializable {
 			}
 		}
 	}
-	public void resetUser(){
+//	public void resetUser(){
+//		try {
+//			um.resetUser(selectedUser);
+//			loadUsers();
+//			StaticMethodUtils.addFacesMessage(FacesMessage.SEVERITY_INFO, "Success!", "User has been unlocked successfully.");
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			StaticMethodUtils.addFacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "User could not be unlocked.");
+//		}
+//	}
+//	
+	public void resetUser() throws Exception{
 		try {
-			um.resetUser(selectedUser);
+			UserSignOnManager usm = new UserSignOnManager();
+			UserSignOn userSignOn = usm.retrieveUserSignOnByUserId(selectedUser.getId());
+			userSignOn.setLocked(0);
+			userSignOn.setRecentUnlock(1);
+			userSignOn.setFailedAttempts(0);
+			usm.updateUserSignOn(userSignOn);
 			loadUsers();
 			StaticMethodUtils.addFacesMessage(FacesMessage.SEVERITY_INFO, "Success!", "User has been unlocked successfully.");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			StaticMethodUtils.addFacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "User could not be unlocked.");
 		}
-	}
 	
+	}
 	public void updateUser(){
 		if (validateUser(selectedUser, UPDATE)) {
 			try {
@@ -101,7 +122,7 @@ public class UserManagerPage implements Serializable {
 				loadUsers();
 				StaticMethodUtils.addFacesMessage(FacesMessage.SEVERITY_INFO,"Success!", "User has been updated successfully.");
 			} catch (Exception e) {
-				StaticMethodUtils.addFacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "There was an error while updating this user." );
+				StaticMethodUtils.addFacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", e.getMessage());
 			}
 		}
 	}
@@ -114,6 +135,9 @@ public class UserManagerPage implements Serializable {
 			StaticMethodUtils.addFacesMessage(FacesMessage.SEVERITY_INFO,"Success!", "User has been deleted successfully.");
 		} catch (SQLException e) {
 			StaticMethodUtils.addFacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "User not deleted." );
+			e.printStackTrace();
+		} catch (UserSignOnDeleteException e) {
+			StaticMethodUtils.addFacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", e.getMessage() );
 			e.printStackTrace();
 		}
 	}
@@ -142,6 +166,7 @@ public class UserManagerPage implements Serializable {
 		allUsersList = new ArrayList<User>();
 		userRoleMap = new LinkedHashMap<String, String>();
 		context =  FacesContext.getCurrentInstance();
+		userSignOnList = new ArrayList<UserSignOnVO>();
 	}
 	public void generateMaps(){
 		userRoleMap.put("--Select a Role--", "x");
@@ -150,8 +175,17 @@ public class UserManagerPage implements Serializable {
 		userRoleMap.put("User", "user");
 	}
 	public void loadUsers(){
+		//load users
 		allUsersList = new ArrayList<User>();
 		allUsersList = um.retrieveAllUsers();
+		
+		//load usersignon objects
+		userSignOnList = new ArrayList<UserSignOnVO>();
+		for (User user : allUsersList) {
+			UserSignOnVO vo = new UserSignOnVO(user);
+			userSignOnList.add(vo);
+		}
+		
 	}
 	public void showNewUserPanel() {
 		if (dispNewUserPanel) {
@@ -267,5 +301,17 @@ public class UserManagerPage implements Serializable {
 	}
 	public void setFilteredUsers(List<User> filteredUsers) {
 		this.filteredUsers = filteredUsers;
+	}
+	public List<UserSignOnVO> getUserSignOnList() {
+		return userSignOnList;
+	}
+	public void setUserSignOnList(List<UserSignOnVO> userSignOnList) {
+		this.userSignOnList = userSignOnList;
+	}
+	public List<UserSignOnVO> getFilteredUserSignOnList() {
+		return filteredUserSignOnList;
+	}
+	public void setFilteredUserSignOnList(List<UserSignOnVO> filteredUserSignOnList) {
+		this.filteredUserSignOnList = filteredUserSignOnList;
 	}
 }

@@ -66,19 +66,19 @@ public class Menu {
 		opMap.put("optionsList", list);
 		return opMap;
 	}
-	public static Map<String, Object> printLockedUserList() {
-		Utils.printHeader("Locked Users");
-		Map<String, Object> opMap = new HashMap<String, Object>();
-		UserManager um = new UserManager();
-		List<User> users = um.retrieveByLocked(1);
-		printUserList(users);
-		opMap.put("numOptions", users.size());
-		opMap.put("userList", users);
-		System.out.println();
-		System.out.println("Total Locked Users: " + users.size());
-		Utils.printClose();
-		return opMap;
-	}
+//	public static Map<String, Object> printLockedUserList() {
+//		Utils.printHeader("Locked Users");
+//		Map<String, Object> opMap = new HashMap<String, Object>();
+//		UserManager um = new UserManager();
+//		List<User> users = um.retrieveByLocked(1);
+//		printUserList(users);
+//		opMap.put("numOptions", users.size());
+//		opMap.put("userList", users);
+//		System.out.println();
+//		System.out.println("Total Locked Users: " + users.size());
+//		Utils.printClose();
+//		return opMap;
+//	}
 	public static Map<String, Object> printAllUserList() {
 		Utils.printHeader("Users");
 		Map<String, Object> opMap = new HashMap<String, Object>();

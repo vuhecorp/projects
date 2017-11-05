@@ -6,12 +6,17 @@ import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 
+import com.hersa.sample.project.utils.Constants;
+
 public class DefaultConnectionProvider {
 	final static Logger logger = Logger.getLogger(DefaultConnectionProvider.class);
 
 	private static Connection connection;
 	
 	public static Connection setConnectionProvider(String schema){
+		if (schema == null) {
+			schema = Constants.USER_PROVIDER;
+		}
 	//	String connectionUrl = "jdbc:mysql://localhost:3306/" + schema + "?autoReconnect=true&useSSL=false";
 		String connectionUrl = "jdbc:mysql://localhost:3306/" + schema + "?autoReconnect=true&useSSL=false";
 		connection = null;
@@ -36,7 +41,7 @@ public class DefaultConnectionProvider {
 	}
 	
 	public static Connection getConnection() {
-		return connection;
+		return getConnection();
 	}
 	
 }

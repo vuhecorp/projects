@@ -14,6 +14,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
 import com.hersa.sample.project.dao.user.User;
+import com.hersa.sample.project.dao.usersignon.UserSignOn;
 
 @ManagedBean
 @ViewScoped
@@ -23,7 +24,8 @@ public class AuthenticationManager {
 	private final int LOCKOUT_DURATION = (60 *24); //lockout duration. == (60 *24)
 	private final int MAX_TRIAL_PERIOD_MIN = 60; //minutes after which the failed attempts resets to 0; == 60
 	public  int totalTries;
-	UserManager um = new UserManager();
+	private UserManager um = new UserManager();
+	private UserSignOnManager usm = new UserSignOnManager();
 	private String previousUser = null;
 	
 	public AuthenticationManager(){
@@ -31,11 +33,14 @@ public class AuthenticationManager {
 	}
 	public User authenticateUser(String email, String Password) throws Exception{
 		User user = null;
+		UserSignOn userSignon = null;
 		Calendar calendar = Calendar.getInstance();
 		Date now = calendar.getTime();
 		Timestamp currentTimeStamp = new Timestamp(now.getTime());
 			try {
 				user = um.getUserByUsername(email);
+				userSignon = usm.retrieveUserSignOnByUserId(user.getId());
+				
 				if (previousUser == null) {
 					previousUser = user.getEmail();
 				}else {
@@ -45,7 +50,7 @@ public class AuthenticationManager {
 					}
 				}
 			} catch (Exception e) {;;}
-			if (user != null) {
+			if (user != null && userSignon != null) {
 				//set user login history
 				Date lastFailedDate = null;
 				Date firstFailedDate = null;
@@ -54,12 +59,15 @@ public class AuthenticationManager {
 				long minSinceLastFailed = -1;
 				long minSinceLastLocked = -1;
 				long minSinceFirstFailed = -1;
-				int locked = user.getLocked();
+				int locked = userSignon.getLocked();
 				try {
-					failedAttempts = user.getFailedAttempts();
-					lastFailedDate = user.getLastFailed();
-					firstFailedDate = user.getFirstFailed();
-					lockedOnDate = user.getLockedOn();
+//					failedAttempts = user.getFailedAttempts();
+//					lastFailedDate = user.getLastFailed();
+//					firstFailedDate = user.getFirstFailed();
+					failedAttempts = userSignon.getFailedAttempts();
+					lastFailedDate = (Date) userSignon.getLastFailed();
+					firstFailedDate = (Date) userSignon.getFirstFailed();
+					lockedOnDate = userSignon.getLockedOn();
 					minSinceLastFailed = ((now.getTime() - lastFailedDate.getTime())/1000) /60;
 				    minSinceLastLocked = ((now.getTime() - lockedOnDate.getTime())/1000) /60;
 				    minSinceFirstFailed = ((now.getTime() - firstFailedDate.getTime())/1000) /60;
@@ -90,18 +98,21 @@ public class AuthenticationManager {
 				if (minSinceFirstFailed > MAX_TRIAL_PERIOD_MIN) {
 					//user gets 4 attempts on the hour.
 					totalTries = 0;
-					user.setFailedAttempts(totalTries);
-					um.updateUserSignon(user);
+			//		user.setFailedAttempts(totalTries);
+//					um.updateUserSignon(user);
+					userSignon.setFailedAttempts(totalTries);
+					usm.updateUserSignOn(userSignon);
 				}
-				int userLocked = user.getLocked();
+				//int userLocked = user.getLocked();
+				int userLocked = userSignon.getLocked();
 				//if the user is not locked, proceed with authentication.
 				if (userLocked != 1) {
 					//if the user has been recently unlocked, set attempts to 0.
 					//this allows the user to keep the same session.
-					if (user.getRecentUnlock() == 1) {
+					if (userSignon.getRecentUnlock() == 1) {
 						totalTries = 0;
-						user.setRecentUnlock(0);
-						um.updateUserSignon(user);
+						userSignon.setRecentUnlock(0);
+			//			um.updateUserSignon(user);
 					}
 					if (totalTries < MAX_TRIES) {
 						if (totalTries > 2) {
@@ -112,26 +123,31 @@ public class AuthenticationManager {
 							//user authenticated
 							
 							totalTries = 0;
-							user.setFailedAttempts(0);
-							um.updateUserSignon(user);
+							userSignon.setFailedAttempts(0);
+							Date now1 = new Date();
+							Timestamp stamp = new Timestamp(now1.getTime());
+							userSignon.setLastLogin(stamp);
+							usm.updateUserSignOn(userSignon);
 							return user;
 						}else{
 							//authentication failed.
 							totalTries++;
 							currentTimeStamp = new Timestamp(now.getTime());
 							if (totalTries == 1) {
-								user.setFirstFailed(currentTimeStamp);
+								userSignon.setFirstFailed(currentTimeStamp);
 							}
-							user.setFailedAttempts(totalTries);
-							user.setLastFailed(currentTimeStamp);
-							um.updateUserSignon(user);
+							userSignon.setFailedAttempts(totalTries);
+							userSignon.setLastFailed(currentTimeStamp);
+							//um.updateUserSignon(user);
+							usm.updateUserSignOn(userSignon);
 						}
 					}else{
 						//lock user if attempts threshold is reached.
-						user.setLocked(1);
+						userSignon.setLocked(1);
 						currentTimeStamp = new Timestamp(now.getTime());
-						user.setLockedOn(currentTimeStamp);
-						um.updateUserSignon(user);
+						userSignon.setLockedOn(currentTimeStamp);
+					//	um.updateUserSignon(user);
+						usm.updateUserSignOn(userSignon);
 						throw new Exception("You have reached the max number of attempts. Your account has been locked out.");
 //						FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Info", "You have "
 //								+ "reached the max number of attempts. Your account has been locked out."));
@@ -152,9 +168,10 @@ public class AuthenticationManager {
 	}
 	public void resetUser(String email) throws Exception{
 		User user = um.getUserByUsername(email);
-		user.setLocked(0);
-		user.setRecentUnlock(1);
-		user.setFailedAttempts(0);
-		um.updateUserSignon(user);
+		UserSignOn userSignOn = usm.retrieveUserSignOnByUserId(user.getId());
+		userSignOn.setLocked(0);
+		userSignOn.setRecentUnlock(1);
+		userSignOn.setFailedAttempts(0);
+		usm.updateUserSignOn(userSignOn);
 	}
 }
