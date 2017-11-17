@@ -41,8 +41,8 @@ public class UserDAOImpl implements UserDAO {
 			statement.setString(i++, user.getEmail());
 			statement.setInt(i++, user.getActive());
 			statement.setString(i++, user.getRole());
+			statement.setString(i++, user.getCreatedBy());
 			statement.setString(i++, user.getModifiedBy());
-			statement.setString(i++, user.getUserName());
 			Timestamp stamp = null;
 			try {
 				stamp = new Timestamp(user.getModifiedDate().getTime());

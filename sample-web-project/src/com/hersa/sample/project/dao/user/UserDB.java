@@ -44,6 +44,7 @@ public class UserDB {
 											LNAME + " = ?, " +
 											PASSWORD + " = ?, " +
 											EMAIL + " = ?, " +
+											ACTIVE + " = ?, " +
 											ROLE + " = ?, " +
 											CREATEDBY + " = ?, " +
 											MODIFIEDBY + " = ?, " +

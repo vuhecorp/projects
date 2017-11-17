@@ -13,16 +13,6 @@ xmlns:hersa="http://java.sun.com/jsf/composite/tags">
 			<ui:define name="centeredContent">
 				<p:messages showDetail="true" autoUpdate="true" closable="true" />
 				<hersa:login myLoginBean="#{signOnBean}" loginAction="#{signOnBean.doSignOn}"/>
-				<div class="ui-g-12 ui-md-12 ui-lg-12">
-					<div id="guest" class="ui-g-12 ui-md-12 ui-lg-6">
-						<p:commandLink value="Guest" 
-								 action="/public/publicHome.xhtml?faces-redirect=true"/>
-					</div>
-					<div id="register" class="ui-g-12 ui-md-12 ui-lg-6" >
-						<p:commandLink value="Register" 
-								 action="/public/publicHome.xhtml?faces-redirect=true"/>
-					</div>
-				</div>
 			</ui:define>
 		</ui:composition>
 		</div>

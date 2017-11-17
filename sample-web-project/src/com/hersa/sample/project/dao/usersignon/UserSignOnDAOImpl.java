@@ -9,6 +9,10 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Victor
+ * P
+ */
 public class UserSignOnDAOImpl implements UserSignOnDAO{
 	private Connection connection;
 	

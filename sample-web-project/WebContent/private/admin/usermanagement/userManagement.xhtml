@@ -5,7 +5,7 @@ xmlns:ui="http://java.sun.com/jsf/facelets"
 xmlns:f="http://java.sun.com/jsf/core"
 xmlns:h="http://java.sun.com/jsf/html"
 xmlns:p="http://primefaces.org/ui"
-xmlns:c="http://xmlns.jcp.org/jsp/jstl/core" 
+xmlns:c="http://java.sun.com/jsp/jstl/core" 
 lang="en">
 
 <h:body>
@@ -13,7 +13,7 @@ lang="en">
 		<ui:composition template="${pageContext.request.contextPath}/templates/privatemaintemplate.xhtml">
 			<ui:define name="css">
 			<h:outputStylesheet library="css" 
-				        name="userManagementStyle.css"/>
+				        		name="userManagementStyle.css"/>
 			</ui:define>
 			<ui:define name="title">Users</ui:define>	
 			<ui:define name="scripts">
@@ -32,119 +32,21 @@ lang="en">
 			<ui:define name="pageheader">User Management</ui:define>
 			<ui:define name="topcontent">
 				<h:form id="indexMainForm">
-		        <p:panel id="indexMainPanel" class="ui-g-12 ui-md-12 ui-lg-12" style="min-height:500px;">
+		        <p:panel id="indexMainPanel" 
+		        		 class="ui-g-12 ui-md-12 ui-lg-12" 
+		        		 style="min-height:500px;">
 					 <div class="ui-g-12 ui-md-12 ui-lg-12">
 	                	<h2>User Management</h2>
 	                	<p>Form this page you can add, edit and delete user profiles. Select a user from the table to edit its properties.</p>
 	                	<p:messages id="msg" showDetail="true" closable="true" />
-	                	
 	                	<p:panel id="mainConentPanel" class="ui-g-12 ui-md-12 ui-lg-12"
 	                				style="border:none;">
-	                		<p:outputPanel autoUpdate="true">		
-		                		<div id="newBtn" class="ui-g ui-md-12 ui-lg-12 ui-g-nopad">
-		                			<p:commandButton value="#{userManagementBean.userBtnText}" class="actionBtn"
-		                						   	 update="newUserOutputPanel"
-		                						     action="#{userManagementBean.showNewUserPanel}"
-		                						     rendered="#{not userManagementBean.dispNewUserPanel}"/>
-		                		</div>
-	                		</p:outputPanel>
-	                		<p:outputPanel id="newUserOutputPanel">
-		                			<p:panel id="newUserInfo"
-		                				 styleClass="newUserInfoPanel"
-		                				 rendered="#{userManagementBean.dispNewUserPanel}">
-		                			<div>
-		                				<h3>New User Information</h3>
-		                			</div>	 
-		                			<div style="overflow: hidden">	 
-		                			
-		                			<div class="leftColumn">
-										<p:panelGrid columns="1" layout="grid"
-											styleClass="ui-panelgrid-blank">
-											<p:column>
-												<p:outputLabel for="usernametxt" value="Username:" />
-											</p:column>
-											<p:column>
-												<p:inputText id="usernametxt" 
-															 value="#{userManagementBean.newUser.userName}"
-															 required="true"
-															 requiredMessage="Username is required" />
-											</p:column>
-											<p:column>
-												<p:outputLabel for="fnametxt" value="First Name:" />
-											</p:column>
-											<p:column>
-												<p:inputText id="fnametxt" 
-															 value="#{userManagementBean.newUser.firstName}"
-															 required="true"
-															 requiredMessage="First Name is required" />
-											</p:column>
-											<p:column>
-												<p:outputLabel for="lnametxt" value="Last Name:" />
-											</p:column>
-											<p:column>
-												<p:inputText id="lnametxt" 
-															 value="#{userManagementBean.newUser.lastName}" 
-															 required="true"
-															 requiredMessage="Last Name is required"/>
-											</p:column>
-											<p:column>
-												<p:outputLabel for="emailtxt" value="Email:" />
-											</p:column>
-											<p:column>
-												<p:inputText id="emailtxt" 
-															 value="#{userManagementBean.newUser.email}"
-															 required="true"
-															 requiredMessage="Email is required" />
-											</p:column>
-										</p:panelGrid>
-									</div>
-		                			<div class="rightColumn">
-										<p:panelGrid columns="1" layout="grid"
-											styleClass="ui-panelgrid-blank">
-											<p:column>
-												<p:outputLabel value="Role: " />
-											</p:column>
-											<p:column>
-												<p:selectOneMenu value="#{userManagementBean.newUser.role}" >
-													<f:selectItems value="#{userManagementBean.userRoleMap}" />
-												</p:selectOneMenu>
-											</p:column>
-											<p:column>
-												<p:outputLabel for="psswrdtxt" value="Password: " />
-											</p:column>
-											<p:column>
-												<p:password id="psswrdtxt" value="#{userManagementBean.password1}" 
-															feedback="true" 
-															required="true"
-															requiredMessage="Password is required"/>
-											</p:column>
-											<p:column>
-												<p:outputLabel for="password2txt" value="Re-enter Password: " />
-											</p:column>
-											<p:column>
-												<p:password id="password2txt" value="#{userManagementBean.password2}"
-															required="true"
-															requiredMessage="Password 2 is required" />
-											</p:column>
-										</p:panelGrid>
-									</div>
-		                			<div class="rightColumn">
-		                				<p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank">
-		                				<p:commandButton class="actionBtn" value="Save"
-		                							     action="#{userManagementBean.createUser}"
-		                							   	 update="newUserOutputPanel userTable indexMainForm:msg"
-		                							     oncomplete="PF('userTableWidget').clearFilters();">
-		                				</p:commandButton>
-		                				<p:commandButton class="cancelBtn" value="Cancel"
-		                								 update="newUserOutputPanel msg"
-		                						     	 action="#{userManagementBean.showNewUserPanel}"
-		                						     	 immediate="true"/>
-		                				</p:panelGrid>
-		                			</div>
-		                			</div>
-		                		</p:panel>		
-	                		</p:outputPanel>
-	                		
+	                		<div id="newBtn" class="ui-g ui-md-12 ui-lg-12 ui-g-nopad">
+	                			<p:commandButton value="New User" 
+	                							 class="actionBtn"
+	                							 action="#{userManagementBean.prepNewUser}"
+	                						     oncomplete="PF('createDialogWidget').show();"/>
+	                		</div>
 	                		<p:dataTable id="userTable"
 	                					 widgetVar="userTableWidget"
 	                					 liveResize="true"
@@ -160,14 +62,18 @@ lang="en">
 									<p:outputPanel>
 										<h:outputText value="Search all fields:" />
 										<p:inputText id="globalFilter"
-											onkeyup="PF('userTableWidget').filter()" style="width:150px"
-											placeholder="Enter keyword" />
+													 onkeyup="PF('userTableWidget').filter()" 
+													 style="width:150px"
+													 placeholder="Enter keyword" />
 									</p:outputPanel>
 								</f:facet>
-								<p:ajax event="rowToggle" onstart="test();"/> 
-								<p:remoteCommand name="updateTable" update="userTable"/>
-								<p:column styleClass="togglerColumn">
-									<p:rowToggler />
+								<p:column>
+									<p:commandButton value="Edit"
+												     oncomplete="PF('editDialogWidget').show();"
+												     update="editForm:editPanel">
+										<f:setPropertyActionListener value="#{user.userDTO}" 
+																	 target="#{userManagementBean.selectedUser}"/>
+									</p:commandButton>
 								</p:column>
 								<p:column headerText="User Name"
 										  filterBy="#{user.userDTO.userName}"
@@ -211,6 +117,11 @@ lang="en">
 										<f:convertDateTime pattern = "MM/dd/yyyy hh:mm:ss" />
 									</p:outputLabel>		                			
 	                			</p:column>
+	                			<p:column headerText="Last Login">
+									<p:outputLabel value="#{user.userSignOnDTO.lastLogin}">
+										<f:convertDateTime pattern = "MM/dd/yyyy hh:mm:ss" />
+									</p:outputLabel>		                			
+	                			</p:column>
 	                			<p:column styleClass="deleteColumn">
 									<p:commandLink icon="ui-icon-trash"
 												   immediate="true"
@@ -225,141 +136,277 @@ lang="en">
 												   message="Delete User?" 
 												   icon="ui-icon-alert" />			  
 									</p:commandLink>
-									<p:confirmDialog global="true" showEffect="fade"
-										hideEffect="fade">
+									<p:confirmDialog global="true" 
+													 showEffect="fade"
+													 hideEffect="fade">
 										<p:commandButton value="Yes" type="button"
 											styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
 										<p:commandButton value="No" type="button"
 											styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
 									</p:confirmDialog>
-									</p:column>
-	                			<p:rowExpansion>
-	                				<p:panel id = "editPanelExpansion" class="ui-g-12 ui-md-12 ui-lg-12 ui-g-nopad" style="border:none; background-color: #F5F5F5;">
-	                					<p style="font-weight:bold;">Edit User</p>
-	                					<div class="ui-g-12 ui-md-12 ui-lg-3 ui-g-nopad">
-	                						<p:panelGrid styleClass="ui-panelgrid-blank" 
-	                									 layout="grid" columns = "1">
-	                							<p:column>
-	                								<p:outputLabel value="User Name: "/>
-	                							</p:column>
-	                							<p:column>
-	                								<p:inputText value="#{user.userDTO.userName}"/>
-	                							</p:column>
-	                							<p:column>
-	                								<p:outputLabel value="First Name: "/>
-	                							</p:column>
-	                							<p:column>
-	                								<p:inputText value="#{user.userDTO.firstName}"/>
-	                							</p:column>
-	                							<p:column>
-	                								<p:outputLabel value="Last Name: "/>
-	                							</p:column>
-	                							<p:column>
-	                								<p:inputText value="#{user.userDTO.lastName}"/>
-	                							</p:column>
-	                							<p:column>
-	                								<p:outputLabel value="Email: "/>
-	                							</p:column>
-	                							<p:column>
-	                								<p:inputText value="#{user.userDTO.email}"/>
-	                							</p:column>
-	                							
-	                						</p:panelGrid>
-	                					</div>
-	                					<div class="ui-g-12 ui-md-12 ui-lg-3 ui-g-nopad">
-	                						<p:panelGrid styleClass="ui-panelgrid-blank"
-	                									 layout="grid" columns = "1">
-												<p:column>
-													<p:outputLabel value="Role: " />
-												</p:column>
-												<p:column>
-													<p:selectOneMenu value="#{user.role}">
-														<f:selectItems value="#{userManagementBean.userRoleMap}"/>
-													</p:selectOneMenu>
-												</p:column>
-												<p:column>
-													<p:panelGrid columns="2">
-														<p:column>
-															<p:outputLabel value="Created By: " />
-														</p:column>
-														<p:column>
-															<p:outputLabel value="#{user.userDTO.createdBy}"
-																   style="font-style:italic;"/>
-														</p:column>
-														<p:column>
-															<p:outputLabel value="Modified By: " />
-														</p:column>
-														<p:column>
-															<p:outputLabel value="#{user.userDTO.modifiedBy}"
-																	style="font-style:italic;"/>
-														</p:column>
-														<p:column>
-															<p:outputLabel value="Modified Date: " />
-														</p:column>
-														<p:column>
-															<p:outputLabel value="#{user.userDTO.modifiedDate}">
-																<f:convertDateTime pattern = "MM/dd/yyyy" />
-															</p:outputLabel>
-														</p:column>
-														<p:column>
-															<p:outputLabel value="Account Status: " />
-														</p:column>
-														<p:column>
-															<p:outputLabel value="Locked"
-																   rendered="#{user.userSignOnDTO.locked == 1}" />
-															<p:outputLabel value="Unlocked"
-																   rendered="#{user.userSignOnDTO.locked == 0}"/>
-														</p:column>
-														<p:column rendered="#{user.userSignOnDTO.locked == 1}">
-															<p:outputLabel value="Locked On: " />
-														</p:column>
-														<p:column rendered="#{user.userSignOnDTO.locked == 1}">
-															<p:outputLabel value="#{user.userSignOnDTO.lockedOn}" >
-																<f:convertDateTime pattern = "MM/dd/yyyy" />
-															</p:outputLabel>
-														</p:column>
-														</p:panelGrid>
-												</p:column>
-											</p:panelGrid>
-	                					</div>
-	                					<div class="ui-g-12 ui-md-12 ui-lg-5">
-	                						<p:panelGrid styleClass="ui-panelgrid-blank"
-	                									 layout="grid" columns = "2">
-	                							
-												<p:column>
-													<p:commandButton value="Save" 
-																	 class="actionBtn"
-																	 action="#{userManagementBean.updateUser}"
-																	 style="width:100px"
-																	 update="userTable indexMainForm:msg">
-														<f:setPropertyActionListener value="#{user.userDTO}" 
-																					 target="#{userManagementBean.selectedUser}"/>
-													</p:commandButton>
-												</p:column>
-												<p:column>
-													<p:commandButton  value="Unlock"	
-																	  class="actionBtn"
-																	  style="width:100px;"
-																	  disabled="#{user.userSignOnDTO.locked == 0}"
-																	  action="#{userManagementBean.resetUser}"
-																	  update="userTable indexMainForm:msg"
-																	  oncomplete="PF('userTableWidget').clearFilters()">
-															<f:setPropertyActionListener value="#{user.userDTO}" 
-																						 target="#{userManagementBean.selectedUser}"/>
-													</p:commandButton>
-												</p:column>
-	                						</p:panelGrid>
-	                					</div>
-	                				</p:panel>
-	                			</p:rowExpansion>
+								</p:column>
 	                		</p:dataTable>
 	                	</p:panel>
                 	</div>	
 				</p:panel>
 				</h:form>
+				<!-- ======================================================================================================
+						Dialogs
+					 ====================================================================================================== -->
+				<p:dialog id="editDialog"
+					  widgetVar="editDialogWidget"
+					  draggable="true"
+					  closeOnEscape="true"
+					  resizable="false"
+					  closeable="true"
+					  position="center"
+					  width="50%"
+					  modal="true"
+					  showEffect="true">
+				<h:form id="editForm">
+					<p:panel id = "editPanel" 
+							 class="ui-g-12 ui-md-12 ui-lg-12 ui-g-nopad" 
+							 style="background-color: #F5F5F5;">
+	                	<c:set var="user" value="#{userManagementBean.selectedUser}"/>
+	                	<c:set var="signOn" value="#{userManagementBean.selectedUserSignOn}"/>
+	                	<p style="font-weight:bold;">Edit User</p>
+           					<div class="ui-g-12 ui-md-12 ui-lg-3 ui-g-nopad">
+           						<p:panelGrid styleClass="ui-panelgrid-blank" 
+           									 layout="grid" columns = "1">
+           							<p:column>
+           								<p:outputLabel value="User Name: "/>
+           							</p:column>
+           							<p:column>
+           								<p:inputText value="#{user.userName}"/>
+           							</p:column>
+           							<p:column>
+           								<p:outputLabel value="First Name: "/>
+           							</p:column>
+           							<p:column>
+           								<p:inputText value="#{user.firstName}"/>
+           							</p:column>
+           							<p:column>
+           								<p:outputLabel value="Last Name: "/>
+           							</p:column>
+           							<p:column>
+           								<p:inputText value="#{user.lastName}"/>
+           							</p:column>
+           							<p:column>
+           								<p:outputLabel value="Email: "/>
+           							</p:column>
+           							<p:column>
+           								<p:inputText value="#{user.email}"/>
+           							</p:column>
+           						</p:panelGrid>
+           					</div>
+           					<div class="ui-g-12 ui-md-12 ui-lg-3 ui-g-nopad">
+           						<p:panelGrid styleClass="ui-panelgrid-blank"
+           									 layout="grid" 
+           									 columns = "1">
+									<p:column>
+										<p:outputLabel value="Role: " />
+									</p:column>
+									<p:column>
+										<p:selectOneMenu value="#{user.role}">
+											<f:selectItems value="#{userManagementBean.userRoleMap}"/>
+										</p:selectOneMenu>
+									</p:column>
+									<p:column>
+										<p:panelGrid columns="2">
+											<p:column>
+												<p:outputLabel value="Created By: " />
+											</p:column>
+											<p:column>
+												<p:outputLabel value="#{user.createdBy}"
+													   		   style="font-style:italic;"/>
+											</p:column>
+											<p:column>
+												<p:outputLabel value="Modified By: " />
+											</p:column>
+											<p:column>
+												<p:outputLabel value="#{user.modifiedBy}"
+															   style="font-style:italic;"/>
+											</p:column>
+											<p:column>
+												<p:outputLabel value="Modified Date: " />
+											</p:column>
+											<p:column>
+												<p:outputLabel value="#{user.modifiedDate}">
+													<f:convertDateTime pattern = "MM/dd/yyyy" />
+												</p:outputLabel>
+											</p:column>
+											<p:column>
+												<p:outputLabel value="Account Status: " />
+											</p:column>
+											<p:column>
+												<p:outputLabel value="Locked"
+													   		   rendered="#{signOn.locked == 1}" />
+												<p:outputLabel value="Unlocked"
+													   		   rendered="#{signOn.locked == 0}"/>
+											</p:column>
+											<p:column rendered="#{signOn.locked == 1}">
+												<p:outputLabel value="Locked On: " />
+											</p:column>
+											<p:column rendered="#{signOn.locked == 1}">
+												<p:outputLabel value="#{signOn.lockedOn}" >
+													<f:convertDateTime pattern = "MM/dd/yyyy" />
+												</p:outputLabel>
+											</p:column>
+										</p:panelGrid>
+									</p:column>
+								</p:panelGrid>
+            				</div>
+            				<div class="ui-g-12 ui-md-12 ui-lg-5">
+            					<p:panelGrid styleClass="ui-panelgrid-blank"
+            									 layout="grid" 
+            									 columns = "1">
+									<p:column>
+										<p:commandButton value="Save" 
+														 class="actionBtn"
+														 action="#{userManagementBean.updateUser}"
+														 style="width:100px"
+														 update="indexMainForm:userTable indexMainForm:msg"
+														 oncomplete="PF('editDialogWidget').hide();">
+										</p:commandButton>
+									</p:column>
+									<p:column>
+										<p:commandButton  value="Unlock"	
+														  class="actionBtn"
+														  style="width:100px;"
+														  disabled="#{signOn.locked == 0}"
+														  action="#{userManagementBean.resetUser}"
+														  update="indexMainForm:userTable indexMainForm:msg"
+														  oncomplete="PF('userTableWidget').clearFilters();">
+										</p:commandButton>
+									</p:column>
+            					</p:panelGrid>
+             				</div>
+	                </p:panel>
+				</h:form>		  
+			</p:dialog>
+			<p:dialog id="createDialog"
+					  widgetVar="createDialogWidget"
+					  draggable="true"
+					  closeOnEscape="true"
+					  resizable="false"
+					  closeable="true"
+					  position="center"
+					  modal="true"
+					  showEffect="true">
+				<h:form id="createForm">
+					<p:panel id = "createPanel" 
+							 class="ui-g-12 ui-md-12 ui-lg-12 ui-g-nopad" 
+							 style="border:none; 
+							 		background-color: #F5F5F5;">
+						<p:messages id="createMsg" 
+									showDetail="true" 
+									closable="true"/>	 		
+						<p:outputPanel id="createOutput">
+								<p:panel id="newUserInfo"
+		                				 styleClass="newUserInfoPanel">
+		                			<div>
+		                				<h3>New User Information</h3>
+		                			</div>	 
+		                			<div style="overflow: hidden">	 
+		                			<div class="leftColumn">
+										<p:panelGrid columns="1" 
+													 layout="grid"
+													 styleClass="ui-panelgrid-blank">
+											<p:column>
+												<p:outputLabel for="usernametxt" 
+															   value="Username:" />
+											</p:column>
+											<p:column>
+												<p:inputText id="usernametxt" 
+															 value="#{userManagementBean.newUser.userName}"
+															 required="true"
+															 requiredMessage="Username is required" />
+											</p:column>
+											<p:column>
+												<p:outputLabel for="fnametxt" 
+															   value="First Name:" />
+											</p:column>
+											<p:column>
+												<p:inputText id="fnametxt" 
+															 value="#{userManagementBean.newUser.firstName}"
+															 required="true"
+															 requiredMessage="First Name is required" />
+											</p:column>
+											<p:column>
+												<p:outputLabel for="lnametxt" 
+															   value="Last Name:" />
+											</p:column>
+											<p:column>
+												<p:inputText id="lnametxt" 
+															 value="#{userManagementBean.newUser.lastName}" 
+															 required="true"
+															 requiredMessage="Last Name is required"/>
+											</p:column>
+											<p:column>
+												<p:outputLabel for="emailtxt" value="Email:" />
+											</p:column>
+											<p:column>
+												<p:inputText id="emailtxt" 
+															 value="#{userManagementBean.newUser.email}"
+															 required="true"
+															 requiredMessage="Email is required" />
+											</p:column>
+										</p:panelGrid>
+									</div>
+		                			<div class="rightColumn">
+										<p:panelGrid columns="1" 
+													 layout="grid"
+													 styleClass="ui-panelgrid-blank">
+											<p:column>
+												<p:outputLabel value="Role: " />
+											</p:column>
+											<p:column>
+												<p:selectOneMenu value="#{userManagementBean.newUser.role}" >
+													<f:selectItems value="#{userManagementBean.userRoleMap}" />
+												</p:selectOneMenu>
+											</p:column>
+											<p:column>
+												<p:outputLabel for="psswrdtxt" value="Password: " />
+											</p:column>
+											<p:column>
+												<p:password id="psswrdtxt" value="#{userManagementBean.password1}" 
+															feedback="true" 
+															required="true"
+															requiredMessage="Password is required"/>
+											</p:column>
+											<p:column>
+												<p:outputLabel for="password2txt" value="Re-enter Password: " />
+											</p:column>
+											<p:column>
+												<p:password id="password2txt" value="#{userManagementBean.password2}"
+															required="true"
+															requiredMessage="Password 2 is required" />
+											</p:column>
+										</p:panelGrid>
+									</div>
+		                			<div class="rightColumn">
+		                				<p:panelGrid columns="1" 
+		                							 layout="grid" 
+		                							 styleClass="ui-panelgrid-blank">
+		                				<p:commandButton class="actionBtn" value="Save"
+		                							     action="#{userManagementBean.createUser}"
+		                							   	 update="indexMainForm:userTable createForm"
+		                							     oncomplete="PF('userTableWidget').clearFilters();">
+		                				</p:commandButton>
+		                				<p:commandButton class="cancelBtn" 
+		                								 value="Cancel"
+		                						     	 oncomplete="PF('createDialogWidget').hide();"
+		                						     	 immediate="true"/>
+		                				</p:panelGrid>
+		                			</div>
+		                			</div>
+		                		</p:panel>		
+						</p:outputPanel>
+					</p:panel>
+				</h:form>		  
+			</p:dialog>
 			</ui:define>
 			<ui:define name="middlecontent">
-				
 			</ui:define>
 		</ui:composition>	
 </f:view>

@@ -40,6 +40,8 @@ public class UserManagerPage implements Serializable {
 	/*User*/
 	private User sessionUser;
 	private User selectedUser;
+	private UserSignOn selectedUserSignOn;
+
 	private User newUser;
 	private List<User> allUsersList;
 	private List<User> filteredUsers;
@@ -68,6 +70,10 @@ public class UserManagerPage implements Serializable {
 		loadUsers();
 		generateMaps();
 	}
+	
+	/*=========================================
+	 * Public Methods
+	 * ========================================*/
 	public void createUser() {
 		if (validateUser(newUser, CREATE)) {
 			try {
@@ -86,17 +92,7 @@ public class UserManagerPage implements Serializable {
 			}
 		}
 	}
-//	public void resetUser(){
-//		try {
-//			um.resetUser(selectedUser);
-//			loadUsers();
-//			StaticMethodUtils.addFacesMessage(FacesMessage.SEVERITY_INFO, "Success!", "User has been unlocked successfully.");
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			StaticMethodUtils.addFacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "User could not be unlocked.");
-//		}
-//	}
-//	
+	
 	public void resetUser() throws Exception{
 		try {
 			UserSignOnManager usm = new UserSignOnManager();
@@ -141,6 +137,11 @@ public class UserManagerPage implements Serializable {
 			e.printStackTrace();
 		}
 	}
+
+	/*=========================================
+	 * Private Methods
+	 * ========================================*/
+		
 	/* ========================================================
 	 * Auxiliary Methods
 	 * =======================================================*/
@@ -161,6 +162,7 @@ public class UserManagerPage implements Serializable {
 		sessionUser = new User();
 		dispNewUserPanel = false;
 		userBtnText = "New User";
+		newUser = new User();
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
 		sessionUser = (User) session.getAttribute("User");
 		allUsersList = new ArrayList<User>();
@@ -187,16 +189,10 @@ public class UserManagerPage implements Serializable {
 		}
 		
 	}
-	public void showNewUserPanel() {
-		if (dispNewUserPanel) {
-			dispNewUserPanel = false;
-			userBtnText = "New User";
-			newUser = new User();
-		}else {
-			dispNewUserPanel = true;
-			userBtnText = "Cancel";
-			newUser = new User();
-		}
+	public void prepNewUser() {
+		newUser = new User();
+		password1 = new String();
+		password2 = new String();
 	}
 	private void resetNewUserPanel() {
 		newUser = new User();
@@ -313,5 +309,11 @@ public class UserManagerPage implements Serializable {
 	}
 	public void setFilteredUserSignOnList(List<UserSignOnVO> filteredUserSignOnList) {
 		this.filteredUserSignOnList = filteredUserSignOnList;
+	}
+	public UserSignOn getSelectedUserSignOn() {
+		return selectedUserSignOn;
+	}
+	public void setSelectedUserSignOn(UserSignOn selectedUserSignOn) {
+		this.selectedUserSignOn = selectedUserSignOn;
 	}
 }

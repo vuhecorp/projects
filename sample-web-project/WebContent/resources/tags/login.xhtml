@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 
+xmlns:ui="http://java.sun.com/jsf/facelets" 
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:p="http://primefaces.org/ui"
+xmlns:c="http://java.sun.com/jsp/jstl/core"
+xmlns:composite="http://java.sun.com/jsf/composite">
+	<composite:interface>
+		<composite:attribute name="headerLabel" default="Please Log In"/>
+		<composite:attribute name="userNameLabel" default="User Name:"/>
+		<composite:attribute name="passwordLabel" default="Password:"/>
+		<composite:attribute name="loginBean" default="#{signOnBean}"/>
+		 <composite:attribute name="loginAction" 
+                         method-signature="java.lang.String action()"/>
+	</composite:interface>
+	<composite:implementation>
+		<h:body>
+			<h:form id="loginForm">
+				<p:panelGrid layout="grid"
+							 columns="1">
+					<p:column>
+						<p:outputLabel id="title" 
+									   value="#{cc.attrs.headerLabel}"
+									   style="font-weight:bold;"/>
+					</p:column>
+					<p:column>
+					</p:column>	
+					<p:column>
+						<p:outputLabel value="#{cc.attrs.userNameLabel}"/>
+					</p:column>	
+					<p:column>
+						<p:inputText value="#{cc.attrs.loginBean.email}"/>
+					</p:column>	
+					<p:column>
+						<p:outputLabel value="#{cc.attrs.passwordLabel}"/>
+					</p:column>	
+					<p:column>
+						<p:inputText value="#{cc.attrs.loginBean.password}"/>
+					</p:column>	
+					<p:column>
+						<p:commandButton value="Login" action="#{cc.attrs.loginAction}"/>
+					</p:column>		 
+				</p:panelGrid>
+			</h:form>
+		</h:body>
+	</composite:implementation>
+</html>

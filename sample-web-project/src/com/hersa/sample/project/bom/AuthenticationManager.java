@@ -61,9 +61,7 @@ public class AuthenticationManager {
 				long minSinceFirstFailed = -1;
 				int locked = userSignon.getLocked();
 				try {
-//					failedAttempts = user.getFailedAttempts();
-//					lastFailedDate = user.getLastFailed();
-//					firstFailedDate = user.getFirstFailed();
+					
 					failedAttempts = userSignon.getFailedAttempts();
 					lastFailedDate = (Date) userSignon.getLastFailed();
 					firstFailedDate = (Date) userSignon.getFirstFailed();
@@ -98,30 +96,31 @@ public class AuthenticationManager {
 				if (minSinceFirstFailed > MAX_TRIAL_PERIOD_MIN) {
 					//user gets 4 attempts on the hour.
 					totalTries = 0;
-			//		user.setFailedAttempts(totalTries);
-//					um.updateUserSignon(user);
 					userSignon.setFailedAttempts(totalTries);
 					usm.updateUserSignOn(userSignon);
 				}
-				//int userLocked = user.getLocked();
+				
 				int userLocked = userSignon.getLocked();
+				
 				//if the user is not locked, proceed with authentication.
 				if (userLocked != 1) {
+					
 					//if the user has been recently unlocked, set attempts to 0.
 					//this allows the user to keep the same session.
 					if (userSignon.getRecentUnlock() == 1) {
 						totalTries = 0;
 						userSignon.setRecentUnlock(0);
-			//			um.updateUserSignon(user);
 					}
 					if (totalTries < MAX_TRIES) {
 						if (totalTries > 2) {
 							int remainingTries = MAX_TRIES - totalTries;
-							FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Info", "You have " + remainingTries + " remaining."));
+							FacesContext.getCurrentInstance().addMessage(null, 
+									new FacesMessage(FacesMessage.SEVERITY_WARN, "Info", "You have " 
+													+ remainingTries + " remaining."));
 						}
 						if (user.getPassword().equals(Password)) {
-							//user authenticated
 							
+							//user authenticated
 							totalTries = 0;
 							userSignon.setFailedAttempts(0);
 							Date now1 = new Date();
@@ -130,39 +129,34 @@ public class AuthenticationManager {
 							usm.updateUserSignOn(userSignon);
 							return user;
 						}else{
+							
 							//authentication failed.
 							totalTries++;
 							currentTimeStamp = new Timestamp(now.getTime());
+							
 							if (totalTries == 1) {
 								userSignon.setFirstFailed(currentTimeStamp);
 							}
+							
 							userSignon.setFailedAttempts(totalTries);
 							userSignon.setLastFailed(currentTimeStamp);
 							//um.updateUserSignon(user);
 							usm.updateUserSignOn(userSignon);
 						}
 					}else{
+						
 						//lock user if attempts threshold is reached.
 						userSignon.setLocked(1);
 						currentTimeStamp = new Timestamp(now.getTime());
 						userSignon.setLockedOn(currentTimeStamp);
-					//	um.updateUserSignon(user);
 						usm.updateUserSignOn(userSignon);
 						throw new Exception("You have reached the max number of attempts. Your account has been locked out.");
-//						FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Info", "You have "
-//								+ "reached the max number of attempts. Your account has been locked out."));
-						
 					}
 				}else{
 					throw new Exception("Your account has been locked out.");
-//					FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Info", "Your account "
-//							+ "is locked. Please contact an administrator."));
-//					return null;
 				}
 			}else{
 				throw new Exception("This email does not exist.");
-//				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Info", "This email does not exist."));
-//				return null;
 			}
 		return null;
 	}
