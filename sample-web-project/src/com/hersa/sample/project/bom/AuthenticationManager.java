@@ -16,8 +16,6 @@ import javax.servlet.http.HttpSession;
 import com.hersa.sample.project.dao.user.User;
 import com.hersa.sample.project.dao.usersignon.UserSignOn;
 
-@ManagedBean
-@ViewScoped
 public class AuthenticationManager {
 	
 	private final int MAX_TRIES = 4;
@@ -49,7 +47,9 @@ public class AuthenticationManager {
 						previousUser = user.getEmail();
 					}
 				}
-			} catch (Exception e) {;;}
+			} catch (Exception e) {
+				throw e;
+			}
 			if (user != null && userSignon != null) {
 				//set user login history
 				Date lastFailedDate = null;
@@ -112,13 +112,13 @@ public class AuthenticationManager {
 						userSignon.setRecentUnlock(0);
 					}
 					if (totalTries < MAX_TRIES) {
-						if (totalTries > 2) {
-							int remainingTries = MAX_TRIES - totalTries;
-							FacesContext.getCurrentInstance().addMessage(null, 
-									new FacesMessage(FacesMessage.SEVERITY_WARN, "Info", "You have " 
-													+ remainingTries + " remaining."));
-						}
-						if (user.getPassword().equals(Password)) {
+//						if (totalTries > 2) {
+//							int remainingTries = MAX_TRIES - totalTries;
+//							FacesContext.getCurrentInstance().addMessage(null, 
+//									new FacesMessage(FacesMessage.SEVERITY_WARN, "Info", "You have " 
+//													+ remainingTries + " remaining."));
+//						}
+						if (userSignon.getPassword().equals(Password)) {
 							
 							//user authenticated
 							totalTries = 0;

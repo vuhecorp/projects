@@ -14,7 +14,6 @@ public class UserDB {
 	public static final String ID = "rowid";
 	public static final String FNAME = "fname";
 	public static final String LNAME = "lname";
-	public static final String PASSWORD = "password";
 	public static final String EMAIL = "email";
 	public static final String ACTIVE = "isactive";
 	public static final String ROLE = "role";
@@ -26,7 +25,6 @@ public class UserDB {
 	private static final String ALL_COLUMNS = ID + " , " +
 											  FNAME + " , " +
 											  LNAME + " , " +
-											  PASSWORD + " , " +
 											  EMAIL + " , " +
 											  ACTIVE + " , " +
 											  ROLE + " , " +
@@ -42,7 +40,6 @@ public class UserDB {
 											" SET " +  
 											FNAME + " = ?, " +
 											LNAME + " = ?, " +
-											PASSWORD + " = ?, " +
 											EMAIL + " = ?, " +
 											ACTIVE + " = ?, " +
 											ROLE + " = ?, " +
@@ -56,11 +53,10 @@ public class UserDB {
 	public static final String CREATE = "INSERT INTO " + tableName + " (" + 
 																FNAME + " , " +
 																LNAME + " , " + 
-																PASSWORD + " , " + 
 																EMAIL + " , " + 
 																ROLE + " , " + 
 																CREATEDBY + " , " + 
 																USERNAME + ") "
-															+ "VALUES (?,?,?,?,?,?,?)";
+															+ "VALUES (?,?,?,?,?,?)";
 
 }

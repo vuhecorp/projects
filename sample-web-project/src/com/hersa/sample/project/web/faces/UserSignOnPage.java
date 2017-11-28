@@ -16,10 +16,7 @@ import com.mysql.jdbc.StringUtils;
 @ManagedBean(name="SignOn")
 @SessionScoped
 public class UserSignOnPage implements Serializable{
-
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 	private String email;
 	private String password;

@@ -6,29 +6,29 @@ import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 
+import com.hersa.sample.project.dao.util.ConnectionProvider;
 import com.hersa.sample.project.utils.Constants;
 
-public class DefaultConnectionProvider {
+public class DefaultConnectionProvider implements ConnectionProvider {
 	final static Logger logger = Logger.getLogger(DefaultConnectionProvider.class);
-
+	
 	private static Connection connection;
 	
 	public static Connection setConnectionProvider(String schema){
 		if (schema == null) {
 			schema = Constants.USER_PROVIDER;
 		}
-	//	String connectionUrl = "jdbc:mysql://localhost:3306/" + schema + "?autoReconnect=true&useSSL=false";
+		
 		String connectionUrl = "jdbc:mysql://localhost:3306/" + schema + "?autoReconnect=true&useSSL=false";
 		connection = null;
 		
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			connection = DriverManager.getConnection(connectionUrl, "root", "A1128857795!");
+			connection = DriverManager.getConnection(connectionUrl, "user", "pass");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
-		
 		return connection;
 	}
 	

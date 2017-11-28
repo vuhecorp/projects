@@ -14,6 +14,9 @@ public class UserSignOnDB {
 	public static final String FIRSTFAILED = "firstfailed";
 	public static final String RECENTUNLOCK = "recentunlock";
 	public static final String LASTLOGIN = 	"lastlogin";
+	public static final String LASTUPDATE = "lastupdate";
+	public static final String EXPIRESON = "expireson";
+	public static final String PASSWORD = "password";
 	
 	//query statements
 	
@@ -36,6 +39,12 @@ public class UserSignOnDB {
 			+ RECENTUNLOCK
 			+ " , "
 			+ LASTLOGIN
+			+ " , "
+			+ LASTUPDATE
+			+ " , "
+			+ EXPIRESON
+			+ " , "
+			+ PASSWORD
 			+ " FROM " + USERSIGNON;
 			
 	//delete
@@ -45,7 +54,7 @@ public class UserSignOnDB {
 	public static final String UPDATE_USERSIGNON = "UPDATE " + USERSIGNON + " SET "
 			+ FAILEDATTEMPTS + "= ?, " + LASTFAILED + "= ?, " + LOCKED + "= ?, "
 			+ LOCKEDON + "= ?, " + FIRSTFAILED + "= ?, " + RECENTUNLOCK + "= ?, "
-			+ LASTLOGIN + "= ? ";
+			+ LASTLOGIN + "= ?, " + LASTUPDATE + "= ?, " + EXPIRESON + "= ?, " + PASSWORD + "= ? ";
 	
 	//create
 	public static final String CREATE_USERSIGNON = "INSERT INTO " + USERSIGNON + " (" 
@@ -62,8 +71,10 @@ public class UserSignOnDB {
 					+ FIRSTFAILED 
 					+ " , "
 					+ RECENTUNLOCK
+					+ " , "
+					+ EXPIRESON
+					+ " , "
+					+ PASSWORD
 					+ ") "
-					+ "VALUES (?,?,?,?,?,?,?)";
-	
-	
+					+ "VALUES (?,?,?,?,?,?,?,?,?)";
 }

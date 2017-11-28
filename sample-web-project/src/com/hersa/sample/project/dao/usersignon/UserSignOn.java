@@ -20,6 +20,9 @@ public class UserSignOn {
 	private Date firstFailed;
 	private int recentUnlock;
 	private Date lastLogin;
+	private Date lastUpdate;
+	private Date expiresOn;
+	private String password;
 	
 	/*====================
 	 * Constructors
@@ -91,5 +94,29 @@ public class UserSignOn {
 
 	public void setUserid(long userid) {
 		this.userid = userid;
+	}
+
+	public Date getLastUpdate() {
+		return lastUpdate;
+	}
+
+	public void setLastUpdate(Date lastUpdate) {
+		this.lastUpdate = lastUpdate;
+	}
+
+	public Date getExpiresOn() {
+		return expiresOn;
+	}
+
+	public void setExpiresOn(Date expiresOn) {
+		this.expiresOn = expiresOn;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 }

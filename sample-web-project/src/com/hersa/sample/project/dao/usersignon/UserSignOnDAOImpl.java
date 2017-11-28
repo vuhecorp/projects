@@ -9,31 +9,44 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hersa.sample.project.bom.DefaultConnectionProvider;
+import com.hersa.sample.project.utils.Constants;
+import com.hersa.sample.project.utils.EncryptionService;
+
 /**
  * @author Victor
  * P
  */
 public class UserSignOnDAOImpl implements UserSignOnDAO{
 	private Connection connection;
+	private boolean setByCaller;
 	
+	private String key = "Bar12345Bar12345"; // 128 bit key
+    private String initVector = "RandomInitVector"; // 16 bytes IV
+    
 	@Override
 	public void setConnection(Connection connection) {
 		this.connection = connection;
+		setByCaller = true;
 	}
 	
 	@Override
 	public Connection getConnection() {
-		
+		if (setByCaller) {
+			return connection;
+		}
+		connection = DefaultConnectionProvider.setConnectionProvider(Constants.USER_PROVIDER);
 		return connection;
 	}
 	@Override
 	public void updateUserSignOn(UserSignOn userSignon) throws SQLException, UserSignOnFinderException {
 		PreparedStatement stmt = null;
+		Connection con = this.getConnection();
 		String whereClause = " WHERE userid = ?";
 		try {
 			int i = 1;
 			String sql = UserSignOnDB.UPDATE_USERSIGNON + whereClause;
-			stmt = connection.prepareStatement(sql);
+			stmt = con.prepareStatement(sql);
 			stmt.setInt(i++, userSignon.getFailedAttempts());
 			
 			if (userSignon.getLastFailed() != null) {
@@ -60,6 +73,18 @@ public class UserSignOnDAOImpl implements UserSignOnDAO{
 				stmt.setTimestamp(i++,  stamp);
 			}else {stmt.setTimestamp(i++, null);}
 			
+			if (userSignon.getLastUpdate() != null) {
+				Timestamp stamp = new Timestamp(userSignon.getLastUpdate().getTime());
+				stmt.setTimestamp(i++,  stamp);
+			}else {stmt.setTimestamp(i++, null);}
+			
+			if (userSignon.getExpiresOn() != null) {
+				Timestamp stamp = new Timestamp(userSignon.getExpiresOn().getTime());
+				stmt.setTimestamp(i++,  stamp);
+			}else {stmt.setTimestamp(i++, null);}
+			
+			stmt.setString(i++, encrypt(userSignon.getPassword()));
+			
 			//set whereClause param
 			stmt.setLong(i++, userSignon.getUserid());
 			stmt.execute();
@@ -68,50 +93,59 @@ public class UserSignOnDAOImpl implements UserSignOnDAO{
 			logger.error(e.getMessage());
 			throw new UserSignOnFinderException();
 		}finally {
-			connection.close();
+			if (!setByCaller) {
+				connection.close();
+			}
 		}
 	}
 
 	@Override
 	public void deleteUserSignOn(UserSignOn userSignOn) throws SQLException, UserSignOnDeleteException {
 		String whereClause = " WHERE userid = ?";
+		Connection con = this.getConnection();
 		PreparedStatement stmt = null;
 		try {
 			String sql = UserSignOnDB.DELETE_USERSIGNON + whereClause;
-			stmt = connection.prepareStatement(sql);
+			stmt = con.prepareStatement(sql);
 			stmt.setLong(1, userSignOn.getUserid());
 			stmt.execute();
 		} catch (SQLException e) {
 			logger.debug(e.getMessage());
 			throw new UserSignOnDeleteException();
 		}finally {
-			connection.close();
+			if (!setByCaller) {
+				connection.close();
+			}
 		}
 	}
 	@Override
 	public void deleteUserSignOn(long userid) throws SQLException, UserSignOnDeleteException {
 		String whereClause = " WHERE userid = ?";
+		Connection con = this.getConnection();
 		PreparedStatement stmt = null;
 		try {
 			String sql = UserSignOnDB.DELETE_USERSIGNON + whereClause;
-			stmt = connection.prepareStatement(sql);
+			stmt = con.prepareStatement(sql);
 			stmt.setLong(1, userid);
 			stmt.execute();
 		} catch (SQLException e) {
 			logger.debug(e.getMessage());
 			throw new UserSignOnDeleteException();
 		}finally {
-			connection.close();
+			if (!setByCaller) {
+				connection.close();
+			}
 		}
 	}
 
 	@Override
 	public void createUserSignOn(UserSignOn userSignOn) throws SQLException, UserSignOnCreateException {
 		PreparedStatement stmt = null;
-		
+		Connection con = this.getConnection();
+		String sql = UserSignOnDB.CREATE_USERSIGNON;
 		try {
 			int i = 1;
-			stmt = connection.prepareStatement(UserSignOnDB.CREATE_USERSIGNON);
+			stmt = con.prepareStatement(sql);
 			stmt.setLong(i++, userSignOn.getUserid());
 			stmt.setInt(i++, userSignOn.getFailedAttempts());
 			
@@ -137,8 +171,13 @@ public class UserSignOnDAOImpl implements UserSignOnDAO{
 			}else {
 				stmt.setTimestamp(i++, null);
 			}
-		
 			stmt.setInt(i++, 0);
+			if (userSignOn.getExpiresOn() != null) {
+				Timestamp stamp = new Timestamp(userSignOn.getExpiresOn().getTime());
+				stmt.setTimestamp(i++,  stamp);
+			}else {stmt.setTimestamp(i++, null);}
+			
+			stmt.setString(i++, encrypt(userSignOn.getPassword()));
 			stmt.execute();
 			
 		} catch (SQLException e) {
@@ -149,7 +188,9 @@ public class UserSignOnDAOImpl implements UserSignOnDAO{
 			}
 			
 		}finally {
-			connection.close();
+			if (!setByCaller) {
+				connection.close();
+			}
 		}
 	}
 	
@@ -161,8 +202,10 @@ public class UserSignOnDAOImpl implements UserSignOnDAO{
 		int[] paramTypes = {Types.INTEGER};
 		try {
 			list = listUserSignOn(whereClause, params, paramTypes, null);
-		} catch (Exception e) {
-			// TODO: handle exception
+		} catch (SQLException e) {
+			throw e;
+		}catch(Exception e) {
+			throw new SQLException(e.getMessage());
 		}
 		return list;
 	}
@@ -196,6 +239,7 @@ public class UserSignOnDAOImpl implements UserSignOnDAO{
 	public List<UserSignOn> listUserSignOn(String whereClause, Object[] params, int[]types, String orderBy) throws Exception, 
 	UserSignOnFinderException, SQLException{
 		PreparedStatement stmt = null;
+		Connection con = this.getConnection();
 		ResultSet rs = null;
 		List<UserSignOn> list = new ArrayList<UserSignOn>();
 		
@@ -208,7 +252,7 @@ public class UserSignOnDAOImpl implements UserSignOnDAO{
 		
 		try {
 			String sql = UserSignOnDB.SELECT_USERSIGNON + whereClause;
-			stmt = connection.prepareStatement(sql);
+			stmt = con.prepareStatement(sql);
 			if (!whereClause.isEmpty()) {
 				try {
 					for (int i = 0; i < params.length; i++) {
@@ -227,9 +271,11 @@ public class UserSignOnDAOImpl implements UserSignOnDAO{
 			}
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
-			throw new SQLException(e.getMessage());
+			throw new SQLException("There was an error in retrieving user sign on information");
 		}finally {
-			connection.close();
+			if (!setByCaller) {
+				connection.close();
+			}
 		}
 		return list;
 	}
@@ -247,7 +293,16 @@ public class UserSignOnDAOImpl implements UserSignOnDAO{
 		obj.setFirstFailed(rs.getTimestamp(i++));
 		obj.setRecentUnlock(rs.getInt(i++));
 		obj.setLastLogin(rs.getTimestamp(i++));
-		
+		obj.setLastUpdate(rs.getTimestamp(i++));
+		obj.setExpiresOn(rs.getTime(i++));
+		obj.setPassword(decrypt(rs.getString(i++)));
 		return obj;
+	}
+	
+	private String encrypt(String value) {
+		return EncryptionService.encrypt(key, initVector, value);
+	}
+	private String decrypt(String value) {
+		return EncryptionService.decrypt(key, initVector, value);
 	}
 }

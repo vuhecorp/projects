@@ -70,15 +70,19 @@ public class UserManager extends AbstractBaseManager{
 		Connection connection = this.getConnection();
 		connection.setAutoCommit(false);
 		boolean exception = false;
+		String password = user.getPassword();
 		try {
 			//create user
 			User newUser = null;
 			UserDAO userdao = this.getUserDAO();
+			userdao.setConnection(connection);
 			newUser = userdao.createUser(user);
 			
 			//crate usersignon
 			UserSignOnDAO usersignondao = this.getUserSignOnDAO();
+			usersignondao.setConnection(connection);
 			UserSignOn userSignOn = initUserSignOn(newUser);
+			userSignOn.setPassword(password);
 			usersignondao.createUserSignOn(userSignOn);
 			connection.commit();
 		} catch (Exception e) {
@@ -96,6 +100,34 @@ public class UserManager extends AbstractBaseManager{
 		UserSignOn userSignOn = new UserSignOn();
 		userSignOn.setUserid(newUser.getId());
 		return userSignOn;
+	}
+	public void createUser(UserSignOnVO userVO) throws SQLException, DuplicateUserException{
+		Connection connection = this.getConnection();
+		connection.setAutoCommit(false);
+		boolean exception = false;
+		try {
+			//create user
+			User newUser = null;
+			UserDAO userdao = this.getUserDAO();
+			userdao.setConnection(connection);
+			newUser = userdao.createUser(userVO.getUserDTO());
+			
+			//crate usersignon
+			UserSignOnDAO usersignondao = this.getUserSignOnDAO();
+			usersignondao.setConnection(connection);
+			userVO.getUserSignOnDTO().setUserid(newUser.getId());
+			usersignondao.createUserSignOn(userVO.getUserSignOnDTO());
+			connection.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			connection.rollback();
+			exception = true;
+		}finally {
+			connection.close();
+		}
+		if (exception) {
+			throw new DuplicateUserException("error creating user");
+		}
 	}
 
 	/**

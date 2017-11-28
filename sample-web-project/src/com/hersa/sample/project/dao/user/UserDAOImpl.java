@@ -31,13 +31,13 @@ public class UserDAOImpl implements UserDAO {
 	@Override
 	public void updateUser(User user) throws Exception {
 		String whereClause = "WHERE rowid = ?";
+		Connection con = this.getConnection();
 		String sql = UserDB.UPDATE + whereClause;
 		try {
 			int i = 1;
-			PreparedStatement statement = connection.prepareStatement(sql);
+			PreparedStatement statement = con.prepareStatement(sql);
 			statement.setString(i++, user.getFirstName());
 			statement.setString(i++, user.getLastName());
-			statement.setString(i++, user.getPassword());
 			statement.setString(i++, user.getEmail());
 			statement.setInt(i++, user.getActive());
 			statement.setString(i++, user.getRole());
@@ -61,18 +61,19 @@ public class UserDAOImpl implements UserDAO {
 			throw new Exception("Could not update user.");
 			
 		}finally{
-			DefaultConnectionProvider.closeConnection(connection);
+			if (!setByCaller) {
+				DefaultConnectionProvider.closeConnection(connection);
+			}
 		}
-		
-		
 	}
 	@Override
 	public List<User> retrieveUserByEmail(String email) {
 		List<User> userList = new ArrayList<User>();
 		String whereClause = " WHERE email = ?";
+		Connection con = this.getConnection();
 		String sql = UserDB.SELECT + whereClause;
 		try {
-			PreparedStatement statement = connection.prepareStatement(sql);
+			PreparedStatement statement = con.prepareStatement(sql);
 			statement.setString(1, email);
 			ResultSet results = statement.executeQuery();
 			while(results.next()){
@@ -84,7 +85,9 @@ public class UserDAOImpl implements UserDAO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally{
-			 DefaultConnectionProvider.closeConnection(connection);
+			if (!setByCaller) {
+				DefaultConnectionProvider.closeConnection(connection);
+			}
 		}
 		return userList;
 	}
@@ -93,9 +96,10 @@ public class UserDAOImpl implements UserDAO {
 	public User[] listAllUsers() {
 		User[] users = null;
 		List<User> userList = new ArrayList<User>();
+		Connection con = this.getConnection();
 		String sql = UserDB.SELECT;
 		try {
-			PreparedStatement statement = connection.prepareStatement(sql);
+			PreparedStatement statement = con.prepareStatement(sql);
 			ResultSet results = statement.executeQuery();
 			while (results.next()) {
 				User user = null;
@@ -109,7 +113,9 @@ public class UserDAOImpl implements UserDAO {
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}finally{
-			 DefaultConnectionProvider.closeConnection(connection);
+			if (!setByCaller) {
+				DefaultConnectionProvider.closeConnection(connection);
+			}
 		}
 		return users;
 	}
@@ -132,26 +138,31 @@ public class UserDAOImpl implements UserDAO {
 	public void deleteUser(User user) throws SQLException {
 		PreparedStatement statement;
 		String whereClause = " WHERE rowid = ?";
+		Connection con = this.getConnection();
 		String sql = UserDB.DELETE + whereClause;
 		try {
-			statement = connection.prepareStatement(sql);
+			statement = con.prepareStatement(sql);
 			statement.setLong(1, user.getId());
 			statement.execute();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new SQLException("Error with data base connectivity.");
+		}finally{
+			if (!setByCaller) {
+				DefaultConnectionProvider.closeConnection(connection);	
+			}
 		}
 	}
 	@Override
 	public User createUser(User user) throws Exception {
 		User createdUser = null;
+		Connection con = this.getConnection();
 		String sql = UserDB.CREATE;
 		try {
 			int i = 1;
-			PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement statement = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			statement.setString(i++, user.getFirstName());
 			statement.setString(i++, user.getLastName());
-			statement.setString(i++, user.getPassword());
 			statement.setString(i++, user.getEmail());
 			statement.setString(i++, user.getRole());
 			statement.setString(i++, user.getCreatedBy());
@@ -174,7 +185,10 @@ public class UserDAOImpl implements UserDAO {
 			}
 			throw new SQLException("Error in database connectivity.");
 		}finally{
-			connection.close();
+			if (!setByCaller) {
+				connection.close();
+			}
+			
 		}
 		return createdUser;
 	}
@@ -185,7 +199,6 @@ public class UserDAOImpl implements UserDAO {
 		obj.setId(rs.getInt(i++));
 		obj.setFirstName(rs.getString(i++));
 		obj.setLastName(rs.getString(i++));
-		obj.setPassword(rs.getString(i++));
 		obj.setEmail(rs.getString(i++));
 		obj.setActive(rs.getInt(i++));
 		obj.setRole(rs.getString(i++));
@@ -202,9 +215,10 @@ public class UserDAOImpl implements UserDAO {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		String whereClause = " WHERE rowid = ?";
+		Connection con = this.getConnection();
 		String sql = UserDB.SELECT + whereClause;
 		try {
-			stmt = connection.prepareStatement(sql);
+			stmt = con.prepareStatement(sql);
 			stmt.setInt(1, id);
 			rs = stmt.executeQuery();
 			if (rs.next()) {
@@ -214,20 +228,23 @@ public class UserDAOImpl implements UserDAO {
 			System.err.println(e.getMessage());
 			throw new Exception("Error retrieving user info.");
 		}finally {
-			connection.close();
+			if (!setByCaller) {
+				connection.close();
+			}
 		}
 		return user;
 	}
 	@Override
 	public Connection getConnection() {
-		if (connection != null) {
+		if (setByCaller) {
 			return connection;
 		}
-		return DefaultConnectionProvider.setConnectionProvider(Constants.USER_PROVIDER);
+		connection = DefaultConnectionProvider.setConnectionProvider(Constants.USER_PROVIDER);
+		return connection;
 	}
 	@Override
 	public void setConnectionProvider(ConnectionProvider factory) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 

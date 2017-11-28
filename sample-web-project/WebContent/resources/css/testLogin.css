@@ -1,0 +1,8 @@
+@CHARSET "ISO-8859-1";
+body{
+	margin:0;
+	padding:0;
+	background: url("../resources/images/login_image.jpg") no-repeat fixed center;
+	background-size: cover;   
+	background-color:white;
+}

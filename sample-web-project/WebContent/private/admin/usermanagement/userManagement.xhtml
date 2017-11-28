@@ -382,12 +382,23 @@ lang="en">
 															required="true"
 															requiredMessage="Password 2 is required" />
 											</p:column>
+											<p:column>
+												<p:outputLabel for="expirestxt" value="Expires On: " />
+											</p:column>
+											<p:column>
+												<p:calendar id="expirestxt" value="#{userManagementBean.expiresOn}" pattern="MM-dd-yyyy" mask="true">
+													<f:convertDateTime pattern="MM-dd-yyyy"/>
+												</p:calendar>
+											</p:column>
 										</p:panelGrid>
 									</div>
 		                			<div class="rightColumn">
 		                				<p:panelGrid columns="1" 
 		                							 layout="grid" 
 		                							 styleClass="ui-panelgrid-blank">
+		                				<p:column>
+		                					&nbsp;
+		                				</p:column>			 
 		                				<p:commandButton class="actionBtn" value="Save"
 		                							     action="#{userManagementBean.createUser}"
 		                							   	 update="indexMainForm:userTable createForm"

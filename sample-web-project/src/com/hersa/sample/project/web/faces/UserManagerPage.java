@@ -3,7 +3,9 @@ package com.hersa.sample.project.web.faces;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,18 +43,20 @@ public class UserManagerPage implements Serializable {
 	private User sessionUser;
 	private User selectedUser;
 	private UserSignOn selectedUserSignOn;
-
+	
 	private User newUser;
+	private UserSignOn newUserSignon;
+	private UserSignOnVO newUserVO;
 	private List<User> allUsersList;
 	private List<User> filteredUsers;
 	private List<UserSignOnVO> userSignOnList;
 	private List<UserSignOnVO> filteredUserSignOnList;
-	
-	private boolean dispNewUserPanel;
 	private Map<String, String> userRoleMap;
 	
+	private boolean dispNewUserPanel;
 	private String password1; //password
 	private String password2; //verification
+	private Date expiresOn;
 	public FacesContext context;
 	
 	private static final String CREATE = "create";
@@ -79,7 +83,9 @@ public class UserManagerPage implements Serializable {
 			try {
 				newUser.setCreatedBy(sessionUser.getUserName());
 				newUser = userToLower(newUser);
-				um.createUser(newUser);
+				newUserVO.setUserDTO(newUser);
+				newUserVO.setUserSignOnDTO(newUserSignon);
+				um.createUser(newUserVO);
 				loadUsers();
 				resetNewUserPanel();
 				StaticMethodUtils.addFacesMessage(FacesMessage.SEVERITY_INFO, "Success!", "User has been created successfully.");
@@ -160,9 +166,12 @@ public class UserManagerPage implements Serializable {
 	}
 	public void initializeVariables(){
 		sessionUser = new User();
+		expiresOn = new Date();
 		dispNewUserPanel = false;
 		userBtnText = "New User";
 		newUser = new User();
+		newUserSignon = new UserSignOn();
+		newUserVO = new UserSignOnVO();
 		HttpSession session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(false);
 		sessionUser = (User) session.getAttribute("User");
 		allUsersList = new ArrayList<User>();
@@ -190,13 +199,21 @@ public class UserManagerPage implements Serializable {
 		
 	}
 	public void prepNewUser() {
+		GregorianCalendar c = new GregorianCalendar();
+		c.setTime(new Date()); // Now use today date.
+		c.add(Calendar.DATE, 90); // Adding 5 days
+		expiresOn = c.getTime();
 		newUser = new User();
+		newUserSignon = new UserSignOn();
+		newUserVO = new UserSignOnVO();
 		password1 = new String();
 		password2 = new String();
 	}
 	private void resetNewUserPanel() {
 		newUser = new User();
 		password1 = new String();
+		newUserSignon = new UserSignOn();
+		newUserVO = new UserSignOnVO();
 		password2 = new String();
 	}
 	private boolean validateUser(User user, String action) {
@@ -211,6 +228,13 @@ public class UserManagerPage implements Serializable {
 			}
 		}
 		
+		if (action.equals(CREATE)) {
+			if(!validateExpiration()) {
+				valid = false;
+				StaticMethodUtils.addFacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Expiration must be set to a future date.");
+			}
+		}
+		
 		if (user.getRole().equalsIgnoreCase("x")) {
 			valid = false;
 			StaticMethodUtils.addFacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "Please select a Role.");
@@ -222,7 +246,17 @@ public class UserManagerPage implements Serializable {
 		if (!password2.equals(password1)) {
 			valid = false;
 		}else {
-			newUser.setPassword(password1);
+			newUserSignon.setPassword(password1);
+		}
+		return valid;
+	}
+	private boolean validateExpiration() {
+		boolean valid = true;
+		Date today = new Date();
+		if (expiresOn.before(today)) {
+ 			valid = false;
+		}else {
+			newUserSignon.setExpiresOn(expiresOn);
 		}
 		return valid;
 	}
@@ -315,5 +349,21 @@ public class UserManagerPage implements Serializable {
 	}
 	public void setSelectedUserSignOn(UserSignOn selectedUserSignOn) {
 		this.selectedUserSignOn = selectedUserSignOn;
+	}
+
+	public UserSignOnVO getNewUserVO() {
+		return newUserVO;
+	}
+
+	public void setNewUserVO(UserSignOnVO newUserVO) {
+		this.newUserVO = newUserVO;
+	}
+
+	public Date getExpiresOn() {
+		return expiresOn;
+	}
+
+	public void setExpiresOn(Date expiresOn) {
+		this.expiresOn = expiresOn;
 	}
 }

@@ -19,6 +19,7 @@ xmlns:composite="http://java.sun.com/jsf/composite">
 		<h:body>
 			<h:form id="loginForm">
 				<p:panelGrid layout="grid"
+							 styleClass="ui-panelgrid-blank"
 							 columns="1">
 					<p:column>
 						<p:outputLabel id="title" 
@@ -28,7 +29,9 @@ xmlns:composite="http://java.sun.com/jsf/composite">
 					<p:column>
 					</p:column>	
 					<p:column>
+						<div>
 						<p:outputLabel value="#{cc.attrs.userNameLabel}"/>
+						</div>
 					</p:column>	
 					<p:column>
 						<p:inputText value="#{cc.attrs.loginBean.email}"/>

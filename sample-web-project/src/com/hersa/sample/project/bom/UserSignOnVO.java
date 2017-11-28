@@ -28,6 +28,9 @@ public class UserSignOnVO {
 		this.userDTO = userDTO;
 		setUserSignOnDTO(userDTO);
 	}
+	public UserSignOnVO(){
+		
+	}
 	
 	/*=================================================
 	 * DTO Objects Accessors
