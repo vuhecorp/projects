@@ -7,9 +7,9 @@ xmlns:h="http://java.sun.com/jsf/html"
 xmlns:p="http://primefaces.org/ui">
 	<h:body>
 		<ui:composition template="${pageContext.request.contextPath}/templates/centeredTemplate.xhtml">
-			<ui:define name="title">Welcome</ui:define>
+			<ui:define name="title">#{clientContext.client.name} - Welcome</ui:define>
 			<ui:define name="centeredContent">
-				<h2>Welcome!</h2>
+				<h2><p:outputLabel value="#{clientContext.client.name}"/></h2>
 			 	<p>Welcome to this page. Please log in.</p>
 	            <p:commandButton value="Log In" action="/signon/signon?faces-redirect=true"/>
 			</ui:define>

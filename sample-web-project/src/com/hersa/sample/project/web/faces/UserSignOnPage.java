@@ -8,6 +8,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import com.hersa.sample.project.ApplicationContext;
 import com.hersa.sample.project.bom.AuthenticationManager;
 import com.hersa.sample.project.dao.user.User;
 import com.mysql.jdbc.StringUtils;

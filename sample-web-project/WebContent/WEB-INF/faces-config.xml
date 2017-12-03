@@ -19,6 +19,16 @@
 	  <managed-bean-class>com.hersa.sample.project.bom.AuthenticationManager</managed-bean-class>
 	  <managed-bean-scope>session</managed-bean-scope>
     </managed-bean>
+    <managed-bean>
+	  <managed-bean-name>applicationContext</managed-bean-name>
+	  <managed-bean-class>com.hersa.sample.project.ApplicationContext</managed-bean-class>
+	  <managed-bean-scope>application</managed-bean-scope>
+    </managed-bean>
+   	<managed-bean>
+	  <managed-bean-name>clientContext</managed-bean-name>
+	  <managed-bean-class>com.hersa.sample.project.ClientContext</managed-bean-class>
+	  <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
     <component>
         <component-type>loginComponent</component-type>
         <component-class>com.hersa.sample.project.component.LoginComponent</component-class>

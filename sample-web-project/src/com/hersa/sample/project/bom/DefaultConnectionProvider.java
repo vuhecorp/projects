@@ -24,7 +24,7 @@ public class DefaultConnectionProvider implements ConnectionProvider {
 		
 		try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			connection = DriverManager.getConnection(connectionUrl, "user", "pass");
+			connection = DriverManager.getConnection(connectionUrl, "user", "password");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

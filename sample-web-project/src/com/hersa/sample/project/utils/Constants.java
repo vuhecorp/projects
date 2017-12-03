@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Constants {
+	
+	//application constants
+	public static final String APPLICATON_CLIENT = "java:comp/env/configuration/applicationClient";
 	public static final String AUTH_PROVIDER = "sample_project";
 	public static final String USER_PROVIDER = "sample_project";
 	
