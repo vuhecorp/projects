@@ -3,6 +3,10 @@ package com.hersa.sample.project.dao.userprofile;
 import java.io.Serializable;
 
 public class UserProfile implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3099596366764214287L;
 	private Long ROWID;
 	private Long USERID;
 	private String PHONE;

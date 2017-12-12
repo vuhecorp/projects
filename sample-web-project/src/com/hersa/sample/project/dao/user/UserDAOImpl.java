@@ -9,7 +9,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.impl.Log4JLogger;
+
 
 import com.hersa.sample.project.DuplicateUserException;
 import com.hersa.sample.project.bom.DefaultConnectionProvider;
@@ -18,7 +19,7 @@ import com.hersa.sample.project.utils.Constants;
 
 
 public class UserDAOImpl implements UserDAO {
-	final static Logger logger = Logger.getLogger(UserDAOImpl.class);
+	final static Log4JLogger logger = new Log4JLogger();
 
 	private String tableName = Constants.USERS;
 	private Connection connection;

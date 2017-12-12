@@ -3,12 +3,13 @@ package com.hersa.sample.project.dao.userprofile;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.impl.Log4JLogger;
+
 
 import com.hersa.sample.project.utils.Constants;
 
 public class UserProfileDAOImpl implements UserProfileDAO {
-	final static Logger logger = Logger.getLogger(UserProfileDAOImpl.class);
+	final static Log4JLogger logger = new Log4JLogger();
 	private String tableName = Constants.USER_PROFILE;
 	private Connection connection;
 	private String prefix = Constants.USER_PROVIDER;

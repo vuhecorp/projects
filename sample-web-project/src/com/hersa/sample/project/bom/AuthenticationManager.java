@@ -7,11 +7,11 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
+//import javax.faces.application.FacesMessage;
+//import javax.faces.bean.ManagedBean;
+//import javax.faces.bean.ViewScoped;
+//import javax.faces.context.FacesContext;
+
 
 import com.hersa.sample.project.dao.user.User;
 import com.hersa.sample.project.dao.usersignon.UserSignOn;

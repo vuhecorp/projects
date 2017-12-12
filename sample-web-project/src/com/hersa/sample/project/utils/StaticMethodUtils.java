@@ -12,7 +12,7 @@ public class StaticMethodUtils {
 	
 	
 	public static void addFacesMessage(Severity severity, String message, String header){
-		
+	
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(severity,
 				message, header));
 	}

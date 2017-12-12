@@ -17,6 +17,8 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.context.annotation.Scope;
+
 import com.hersa.sample.project.DuplicateUserException;
 import com.hersa.sample.project.bom.UserManager;
 import com.hersa.sample.project.bom.UserSignOnManager;
@@ -27,7 +29,7 @@ import com.hersa.sample.project.dao.usersignon.UserSignOnDeleteException;
 import com.hersa.sample.project.utils.StaticMethodUtils;
 
 @ManagedBean(name="userManagementBean")
-@ViewScoped
+@Scope(value = "view")
 public class UserManagerPage implements Serializable {
 
 	/**
@@ -88,6 +90,7 @@ public class UserManagerPage implements Serializable {
 				um.createUser(newUserVO);
 				loadUsers();
 				resetNewUserPanel();
+				
 				StaticMethodUtils.addFacesMessage(FacesMessage.SEVERITY_INFO, "Success!", "User has been created successfully.");
 			} catch (SQLException e) {
 				StaticMethodUtils.addFacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", "User could not be created.");

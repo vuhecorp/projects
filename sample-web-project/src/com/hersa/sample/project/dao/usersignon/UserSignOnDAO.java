@@ -4,12 +4,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
-
+import org.apache.commons.logging.impl.Log4JLogger;
 
 public interface UserSignOnDAO {
-	final static Logger logger = Logger.getLogger(UserSignOnDAO.class);
+	final static Log4JLogger logger = new Log4JLogger();
 	public void setConnection(Connection connection);
 	public Connection getConnection();
 	public List<UserSignOn> retrieveUserSignOnByUserId(long userid) throws SQLException, UserSignOnFinderException;

@@ -47,6 +47,7 @@ public class Test {
 		userSignOn.setFailedAttempts(0);
 		usm.updateUserSignOn(userSignOn);
 	}
+	@SuppressWarnings("unused")
 	private static void deleteUser() {
 		UserSignOnManager usm = new UserSignOnManager();
 		UserSignOn signon = new UserSignOn();
@@ -72,6 +73,7 @@ public class Test {
 		
 	}
 
+	@SuppressWarnings("unused")
 	private static void updateUser() {
 		UserSignOnManager usm = new UserSignOnManager();
 		UserSignOn signon = new UserSignOn();

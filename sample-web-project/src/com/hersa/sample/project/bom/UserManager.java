@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.impl.Log4JLogger;
 
 import com.hersa.sample.project.DuplicateUserException;
 import com.hersa.sample.project.dao.user.SaveUserNames;
@@ -21,7 +21,7 @@ import com.hersa.sample.project.dao.usersignon.UserSignOnDeleteException;
  *
  */
 public class UserManager extends AbstractBaseManager{
-	final static Logger logger = Logger.getLogger(UserManager.class);
+	final static Log4JLogger logger = new Log4JLogger();
 
 	public UserManager(){
 		 

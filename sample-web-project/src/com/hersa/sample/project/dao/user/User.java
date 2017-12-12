@@ -1,7 +1,6 @@
 package com.hersa.sample.project.dao.user;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.Date;
 
 import com.hersa.sample.project.bom.SystemUser;

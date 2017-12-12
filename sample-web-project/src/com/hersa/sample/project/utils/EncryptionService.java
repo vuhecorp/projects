@@ -6,6 +6,8 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
 
+
+
 /**
  * @author Victor
  *  This class will provide encryption / decryption
@@ -36,7 +38,7 @@ public class EncryptionService {
 	        try {
 	            IvParameterSpec iv = new IvParameterSpec(initVector.getBytes("UTF-8"));
 	            SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes("UTF-8"), "AES");
-
+	            
 	            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
 	            cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);
 

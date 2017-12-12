@@ -67,7 +67,7 @@
 		</description>
 		<env-entry-name>configuration/applicationClient</env-entry-name>
 		<env-entry-type>java.lang.String</env-entry-type>
-		<env-entry-value>10760</env-entry-value>
+		<env-entry-value>10745</env-entry-value>
 	</env-entry>
  <!-- =============================================================
   		Session
@@ -75,4 +75,21 @@
 	<session-config>
 		<session-timeout>10</session-timeout>
 	</session-config>
+	  
+	
+	 <listener>
+    <listener-class>
+		org.springframework.web.context.ContextLoaderListener
+	</listener-class>
+  </listener>
+  <listener>
+    <listener-class>
+		org.springframework.web.context.request.RequestContextListener
+	</listener-class>
+  </listener>
+  <listener>
+    <listener-class>com.sun.faces.config.ConfigureListener</listener-class>
+</listener>
+
+
 </web-app>

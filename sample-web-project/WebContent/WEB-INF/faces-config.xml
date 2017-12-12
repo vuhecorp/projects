@@ -4,6 +4,10 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_2.xsd"
     version="2.2">
+    <application>
+		<el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
+	</application>
+    
  <managed-bean>
 	  <managed-bean-name>signOnBean</managed-bean-name>
 	  <managed-bean-class>com.hersa.sample.project.web.faces.UserSignOnPage</managed-bean-class>
@@ -33,4 +37,5 @@
         <component-type>loginComponent</component-type>
         <component-class>com.hersa.sample.project.component.LoginComponent</component-class>
     </component>
+    
 </faces-config>

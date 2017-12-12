@@ -2,20 +2,21 @@ package com.hersa.sample.project.web.faces;
 
 import java.io.Serializable;
 
+import javax.annotation.ManagedBean;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
-import com.hersa.sample.project.ApplicationContext;
+import org.springframework.context.annotation.Scope;
+
 import com.hersa.sample.project.bom.AuthenticationManager;
 import com.hersa.sample.project.dao.user.User;
 import com.mysql.jdbc.StringUtils;
 
 
-@ManagedBean(name="SignOn")
-@SessionScoped
+
+@ManagedBean(value="SignOn")
+@Scope(value = "session")
 public class UserSignOnPage implements Serializable{
 	
 	private static final long serialVersionUID = 1L;

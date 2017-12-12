@@ -5,3 +5,41 @@
 17/10/30 22:19:25.470 main ERROR UserSignOnDAO: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '= 54, lastfailed= '2017-10-30 22:18:54.658', locked= 0, lockedon= '2017-10-30 22' at line 1
 17/10/30 22:19:33.927 main ERROR UserSignOnDAO: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '= 54, lastfailed= '2017-10-30 22:19:33.909', locked= 0, lockedon= '2017-10-30 22' at line 1
 17/10/30 22:20:27.670 main ERROR UserSignOnDAO: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '= 54, lastfailed= '2017-10-30 22:19:58.205', locked= 0, lockedon= '2017-10-30 22' at line 1
+17/12/09 23:47:45.084 main INFO ClassPathXmlApplicationContext: Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@dcf3e99: startup date [Sat Dec 09 23:47:45 CST 2017]; root of context hierarchy
+17/12/09 23:47:45.277 main INFO XmlBeanDefinitionReader: Loading XML bean definitions from class path resource [spring.xml]
+17/12/09 23:47:45.283 main DEBUG DefaultDocumentLoader: Using JAXP provider [com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl]
+17/12/09 23:47:45.420 main DEBUG BeansDtdResolver: Found beans DTD [http://www.springframework.org/dtd/spring-beans-2.0.dtd] in classpath: spring-beans-2.0.dtd
+17/12/09 23:48:49.339 main INFO ClassPathXmlApplicationContext: Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@dcf3e99: startup date [Sat Dec 09 23:48:49 CST 2017]; root of context hierarchy
+17/12/09 23:48:49.403 main INFO XmlBeanDefinitionReader: Loading XML bean definitions from class path resource [spring.xml]
+17/12/09 23:48:49.406 main DEBUG DefaultDocumentLoader: Using JAXP provider [com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl]
+17/12/09 23:48:49.432 main DEBUG BeansDtdResolver: Found beans DTD [http://www.springframework.org/dtd/spring-beans-2.0.dtd] in classpath: spring-beans-2.0.dtd
+17/12/09 23:48:49.464 main DEBUG DefaultBeanDefinitionDocumentReader: Loading bean definitions
+17/12/09 23:48:49.542 main DEBUG XmlBeanDefinitionReader: Loaded 1 bean definitions from location pattern [spring.xml]
+17/12/09 23:48:49.542 main DEBUG ClassPathXmlApplicationContext: Bean factory for org.springframework.context.support.ClassPathXmlApplicationContext@dcf3e99: org.springframework.beans.factory.support.DefaultListableBeanFactory@3ab39c39: defining beans [triangle]; root of factory hierarchy
+17/12/09 23:48:49.582 main DEBUG ClassPathXmlApplicationContext: Unable to locate MessageSource with name 'messageSource': using default [org.springframework.context.support.DelegatingMessageSource@30c7da1e]
+17/12/09 23:48:49.620 main DEBUG ClassPathXmlApplicationContext: Unable to locate ApplicationEventMulticaster with name 'applicationEventMulticaster': using default [org.springframework.context.event.SimpleApplicationEventMulticaster@2812cbfa]
+17/12/09 23:48:49.620 main INFO DefaultListableBeanFactory: Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@3ab39c39: defining beans [triangle]; root of factory hierarchy
+17/12/09 23:48:49.621 main DEBUG DefaultListableBeanFactory: Creating shared instance of singleton bean 'triangle'
+17/12/09 23:48:49.633 main DEBUG DefaultListableBeanFactory: Creating instance of bean 'triangle'
+17/12/09 23:48:49.693 main DEBUG DefaultListableBeanFactory: Eagerly caching bean 'triangle' to allow for resolving potential circular references
+17/12/09 23:48:49.709 main DEBUG DefaultListableBeanFactory: Finished creating instance of bean 'triangle'
+17/12/09 23:48:49.710 main DEBUG ClassPathXmlApplicationContext: Unable to locate LifecycleProcessor with name 'lifecycleProcessor': using default [org.springframework.context.support.DefaultLifecycleProcessor@90f6bfd]
+17/12/09 23:48:49.711 main DEBUG DefaultListableBeanFactory: Returning cached instance of singleton bean 'lifecycleProcessor'
+17/12/09 23:48:49.711 main DEBUG DefaultListableBeanFactory: Returning cached instance of singleton bean 'triangle'
+17/12/09 23:55:29.477 main INFO ClassPathXmlApplicationContext: Refreshing org.springframework.context.support.ClassPathXmlApplicationContext@dcf3e99: startup date [Sat Dec 09 23:55:29 CST 2017]; root of context hierarchy
+17/12/09 23:55:29.543 main INFO XmlBeanDefinitionReader: Loading XML bean definitions from class path resource [spring.xml]
+17/12/09 23:55:29.546 main DEBUG DefaultDocumentLoader: Using JAXP provider [com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderFactoryImpl]
+17/12/09 23:55:29.572 main DEBUG BeansDtdResolver: Found beans DTD [http://www.springframework.org/dtd/spring-beans-2.0.dtd] in classpath: spring-beans-2.0.dtd
+17/12/09 23:55:29.589 main DEBUG DefaultBeanDefinitionDocumentReader: Loading bean definitions
+17/12/09 23:55:29.615 main DEBUG XmlBeanDefinitionReader: Loaded 1 bean definitions from location pattern [spring.xml]
+17/12/09 23:55:29.616 main DEBUG ClassPathXmlApplicationContext: Bean factory for org.springframework.context.support.ClassPathXmlApplicationContext@dcf3e99: org.springframework.beans.factory.support.DefaultListableBeanFactory@3ab39c39: defining beans [triangle]; root of factory hierarchy
+17/12/09 23:55:29.634 main DEBUG ClassPathXmlApplicationContext: Unable to locate MessageSource with name 'messageSource': using default [org.springframework.context.support.DelegatingMessageSource@30c7da1e]
+17/12/09 23:55:29.644 main DEBUG ClassPathXmlApplicationContext: Unable to locate ApplicationEventMulticaster with name 'applicationEventMulticaster': using default [org.springframework.context.event.SimpleApplicationEventMulticaster@2812cbfa]
+17/12/09 23:55:29.644 main INFO DefaultListableBeanFactory: Pre-instantiating singletons in org.springframework.beans.factory.support.DefaultListableBeanFactory@3ab39c39: defining beans [triangle]; root of factory hierarchy
+17/12/09 23:55:29.645 main DEBUG DefaultListableBeanFactory: Creating shared instance of singleton bean 'triangle'
+17/12/09 23:55:29.645 main DEBUG DefaultListableBeanFactory: Creating instance of bean 'triangle'
+17/12/09 23:55:29.681 main DEBUG DefaultListableBeanFactory: Eagerly caching bean 'triangle' to allow for resolving potential circular references
+17/12/09 23:55:29.682 main DEBUG DefaultListableBeanFactory: Finished creating instance of bean 'triangle'
+17/12/09 23:55:29.683 main DEBUG ClassPathXmlApplicationContext: Unable to locate LifecycleProcessor with name 'lifecycleProcessor': using default [org.springframework.context.support.DefaultLifecycleProcessor@90f6bfd]
+17/12/09 23:55:29.683 main DEBUG DefaultListableBeanFactory: Returning cached instance of singleton bean 'lifecycleProcessor'
+17/12/09 23:55:29.684 main DEBUG DefaultListableBeanFactory: Returning cached instance of singleton bean 'triangle'

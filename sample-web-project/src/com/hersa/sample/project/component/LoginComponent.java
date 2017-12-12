@@ -10,6 +10,7 @@ public class LoginComponent extends UINamingContainer{
 	public LoginComponent() {
 		super();
 	}
+
 	@Override
 	public void encodeBegin(FacesContext context) throws IOException{
 		String email = (String) getAttributes().get("loginBean");

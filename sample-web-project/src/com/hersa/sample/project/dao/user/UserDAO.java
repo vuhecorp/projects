@@ -4,13 +4,14 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.impl.Log4JLogger;
+
 
 import com.hersa.sample.project.DuplicateUserException;
 import com.hersa.sample.project.dao.util.ConnectionProvider;
 
 public interface UserDAO {
-	final static Logger logger = Logger.getLogger(UserDAO.class);
+	final static Log4JLogger logger = new Log4JLogger();
 
 	public void setConnection(Connection connection);
 	public Connection getConnection();
