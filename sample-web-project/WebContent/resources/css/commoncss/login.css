@@ -1,0 +1,17 @@
+@CHARSET "ISO-8859-1";
+body{
+	margin:0;
+	padding:0;
+	font-family: 'Roboto Condensed', sans-serif;
+	overflow:hidden;
+}
+#login{
+	margin-top:14%;
+	margin-left:25%;
+	margin-right:25%;
+	padding-top:5%;
+	padding-bottom:5%;
+	border:1px solid gray;
+	background-color: white;
+	box-shadow: 5px 5px 2.5px #888888;
+}

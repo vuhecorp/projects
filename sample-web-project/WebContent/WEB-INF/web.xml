@@ -1,25 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1">
   <display-name>sample-project-web</display-name>
-  
-  <!-- =============================================================
-  		Servlets / Mapping
- 	   ================================================================ -->
   <servlet>
     <description>This servlet sends file to client</description>
     <display-name>DownloadFile</display-name>
     <servlet-name>DownloadFile</servlet-name>
     <servlet-class>com.hersa.sample.project.servlet.DownloadFile</servlet-class>
   </servlet>
-  <servlet-mapping>
-    <servlet-name>DownloadFile</servlet-name>
-    <url-pattern>/DownloadFile</url-pattern>
-  </servlet-mapping>
   <servlet>
     <servlet-name>Faces Servlet</servlet-name>
     <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
+  <servlet>
+    <servlet-name>IndexServlet</servlet-name>
+    <servlet-class>com.hersa.sample.project.servlet.IndexServlet</servlet-class>
+  </servlet>
+   <servlet>
+    <servlet-name>StartupServlet</servlet-name>
+    <servlet-class>com.hersa.sample.project.servlet.StartupServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DownloadFile</servlet-name>
+    <url-pattern>/DownloadFile</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>IndexServlet</servlet-name>
+    <url-pattern></url-pattern>
+  </servlet-mapping>
   <servlet-mapping>
     <servlet-name>Faces Servlet</servlet-name>
     <url-pattern>/faces/*</url-pattern>
@@ -28,9 +38,6 @@
     <servlet-name>Faces Servlet</servlet-name>
     <url-pattern>*.xhtml</url-pattern>
   </servlet-mapping>
-   <!-- =============================================================
-  		Welcome Files
- 	   ================================================================ -->
   <welcome-file-list>
     <welcome-file>index.xhtml</welcome-file>
     <welcome-file>index.htm</welcome-file>
@@ -43,41 +50,27 @@
     <extension>xhtml</extension>
     <mime-type>html/text</mime-type>
   </mime-mapping>
-  
-   <!-- =============================================================
-  		Filters
- 	   ================================================================ -->
- 	   
-	<filter>
-		<filter-name>AuthenticationFilter</filter-name>
-		<filter-class>com.hersa.sample.project.servlet.AuthenticationFilter</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>AuthenticationFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
- 
-   <!-- =============================================================
-  		Environment Entries
- 	   ================================================================ -->
-	<env-entry>
-		<description>
+  <filter>
+    <filter-name>AuthenticationFilter</filter-name>
+    <filter-class>com.hersa.sample.project.servlet.AuthenticationFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>AuthenticationFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <env-entry>
+    <description>
 			This is the application client. Define a new client in
 			WEB-INF/classes/configuration.xml
 		</description>
-		<env-entry-name>configuration/applicationClient</env-entry-name>
-		<env-entry-type>java.lang.String</env-entry-type>
-		<env-entry-value>10745</env-entry-value>
-	</env-entry>
- <!-- =============================================================
-  		Session
- 	  ================================================================ -->
-	<session-config>
-		<session-timeout>10</session-timeout>
-	</session-config>
-	  
-	
-	 <listener>
+    <env-entry-name>configuration/applicationClient</env-entry-name>
+    <env-entry-type>java.lang.String</env-entry-type>
+    <env-entry-value>10745</env-entry-value>
+  </env-entry>
+  <session-config>
+    <session-timeout>10</session-timeout>
+  </session-config>
+  <listener>
     <listener-class>
 		org.springframework.web.context.ContextLoaderListener
 	</listener-class>
@@ -89,7 +82,5 @@
   </listener>
   <listener>
     <listener-class>com.sun.faces.config.ConfigureListener</listener-class>
-</listener>
-
-
+  </listener>
 </web-app>

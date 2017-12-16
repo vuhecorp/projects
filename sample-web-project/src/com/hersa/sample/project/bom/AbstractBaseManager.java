@@ -6,6 +6,8 @@ import org.apache.commons.logging.impl.Log4JLogger;
 
 import com.hersa.sample.project.dao.client.ClientDAO;
 import com.hersa.sample.project.dao.client.ClientDAOImpl;
+import com.hersa.sample.project.dao.clientsettings.ClientSettingsDAO;
+import com.hersa.sample.project.dao.clientsettings.ClientSettingsDAOImpl;
 import com.hersa.sample.project.dao.user.UserDAO;
 import com.hersa.sample.project.dao.user.UserDAOImpl;
 import com.hersa.sample.project.dao.usersignon.UserSignOnDAO;
@@ -42,6 +44,15 @@ public class AbstractBaseManager {
 	}
 	public ClientDAO getClientDAO() {
 		ClientDAO dao = new ClientDAOImpl(); 
+		dao.setConnection(getConnectionProvider());
+		if (connection != null) {
+			dao.setConnection(connection);
+		}
+		return dao;
+	}
+	
+	public ClientSettingsDAO getClientSettingsDAO() {
+		ClientSettingsDAO dao = new ClientSettingsDAOImpl(); 
 		dao.setConnection(getConnectionProvider());
 		if (connection != null) {
 			dao.setConnection(connection);

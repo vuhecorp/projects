@@ -1,4 +1,4 @@
-package com.hersa.sample.project.xmlconfig;
+package com.hersa.sample.project.xmlconfig.testing;
 
 import java.util.List;
 
